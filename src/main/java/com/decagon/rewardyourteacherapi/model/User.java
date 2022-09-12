@@ -20,6 +20,7 @@ public class User {
     private String email;
     private String passWord;
     private String profileImage;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }

@@ -17,11 +17,10 @@ public class School{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String schoolName;
-    private String schoolAddress;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "teacher_school",
+            name = "user_school",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "school_id",referencedColumnName = "id")
     )
