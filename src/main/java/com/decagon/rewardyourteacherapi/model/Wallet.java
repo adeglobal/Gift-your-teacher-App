@@ -18,7 +18,7 @@ public class Wallet {
     private long id;
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User user_id;
+    private User userId;
     private BigDecimal total;
 
 

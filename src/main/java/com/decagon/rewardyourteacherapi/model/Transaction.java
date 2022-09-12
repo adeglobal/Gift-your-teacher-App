@@ -16,7 +16,6 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long walletId;
     @OneToOne
     @JoinColumn(name = "sender_id")
     private User sender;

@@ -20,10 +20,6 @@ public class User {
     private String email;
     private String passWord;
     private String profileImage;
-    //private long NIN;
-    private long accountNumber;
-    private String address;
-
-
+    private String role;
 
 }

@@ -25,7 +25,7 @@ public class School{
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "school_id",referencedColumnName = "id")
     )
-    private Collection<User> user;
+    private Collection<User> teachers;
 
 
 }
