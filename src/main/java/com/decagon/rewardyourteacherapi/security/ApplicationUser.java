@@ -16,7 +16,7 @@ public class ApplicationUser implements UserDetails {
 
     public ApplicationUser(User user) {
         this.username = user.getEmail();
-        this.password = user.getPassWord();
+        this.password = user.getPassword();
         List<GrantedAuthority> auth = new ArrayList<>();
         auth.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().name()));
         this.authorities = auth;

@@ -18,7 +18,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private String passWord;
+    private String password;
     private String profileImage;
     @Enumerated(EnumType.STRING)
     private Role role;

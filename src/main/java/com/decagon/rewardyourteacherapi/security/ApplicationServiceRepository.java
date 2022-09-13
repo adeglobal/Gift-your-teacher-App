@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface ApplicationServiceRepository extends CrudRepository<User, Long> {
-    public Optional<User> selectUserByEmailAndPassword(String email);
+    public Optional<User> findUserByEmail(String email);
 }
