@@ -22,5 +22,8 @@ public class User {
     private String profileImage;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne
+    @JoinColumn(name = "school_id")
+    private School school;
 
 }

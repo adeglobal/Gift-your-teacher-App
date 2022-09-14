@@ -41,9 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**", "/index").permitAll()
-                .and().requestMatchers().antMatchers("/api/**")
-                .and().authorizeRequests()
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**", "/index")
+                .permitAll()
                 .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -82,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         corsConfiguration.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", corsConfiguration); // Global for all paths
 
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
