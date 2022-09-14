@@ -1,57 +1,57 @@
 package com.decagon.rewardyourteacherapi.service;
 
-import com.decagon.rewardyourteacherapi.model.Message;
-import com.decagon.rewardyourteacherapi.model.Notification;
-import com.decagon.rewardyourteacherapi.model.Transaction;
-import com.decagon.rewardyourteacherapi.model.User;
+
+import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 
 @Service
 public class NotificationServiceImp implements NotificationService {
 
 
-    private NotificationRepository notificationRepository;
+     final NotificationRepository notificationRepository;
     @Autowired
     public NotificationServiceImp(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
     }
-
-    @Override
-    public void  TransactionNotification(Transaction transaction){
+        @Override
+    public void  saveTransactionNotification(Transaction transaction){
         String message = "";
         if(transaction.getSender().getId() == transaction.getRecipient().getId()){
             Notification notification = new Notification();
             message = "You have successfully funded you wallet with N"+ transaction.getAmount();
-            notification.setUser(transaction.getSender());
+            notification.setUsers(transaction.getSender());
             notification.setMessage(message);
-            notification.setTransaction_id(transaction.getId());
+            System.out.println("working a");
             notificationRepository.save(notification);
         }
         else{
-            ArrayList<Notification> list = new ArrayList<>();
             Notification notification = new Notification();
             notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
-            notification.setTransaction_id(transaction.getId());
-            notification.setUser(transaction.getRecipient());
-            list.add(notification);
-            notification = new Notification("You've successfully fundeed your teacher's wallet with N"+ transaction.getAmount(),
-                    new User(transaction.getSender().getId()));
-            notification.setTransaction_id(transaction.getId());
-            list.add(notification);
-            notificationRepository.saveAll(list);
+            notification.setUsers(transaction.getRecipient());
+            notificationRepository.save(notification);
+            Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"+ transaction.getAmount(),
+                    transaction.getSender());
+            notificationRepository.save(notification2);
+            Iterable<Notification> not = notificationRepository.findAll();
+            System.out.println(not);
         }
 
     }
 
     @Override
-    public void MessageNotification(Message message) {
+    public void saveMessageNotification(Message message) {
         Notification notification = new Notification(message.getContent(), message.getReceiver());
         notificationRepository.save(notification);
     }
+
+    public Notification findNotification(String message, Users users){
+        return notificationRepository.findByMessageAndUsers(message, users).orElse(null);
+    }
+
+
+
 
 }

@@ -19,15 +19,13 @@ public class Notification {
     private long id;
     private String message;
     @OneToOne
-    @JoinColumn(name = "recipient_id")
-    private User user;
+    private Users users;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private  long transaction_id;
 
-    public Notification(String message, User user){
-        this.user = user;
+    public Notification(String message, Users users){
+        this.users = users;
         this.message = message;
     }
 

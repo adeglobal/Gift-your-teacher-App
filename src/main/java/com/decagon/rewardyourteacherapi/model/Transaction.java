@@ -18,14 +18,21 @@ public class Transaction {
     private long id;
     @OneToOne
     @JoinColumn(name = "sender_id")
-    private User sender;
+    private Users sender;
     @OneToOne
     @JoinColumn(name = "recipient_id")
-    private User recipient;
+    private Users recipient;
     private BigDecimal amount;
     private Boolean checked;
 
-    public Transaction(User sender, User recipient, BigDecimal amount) {
+    public Transaction(Users sender, Users recipient, BigDecimal amount) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.amount = amount;
+    }
+
+    public Transaction(long id, Users sender, Users recipient, BigDecimal amount) {
+        this.id = id;
         this.sender = sender;
         this.recipient = recipient;
         this.amount = amount;
