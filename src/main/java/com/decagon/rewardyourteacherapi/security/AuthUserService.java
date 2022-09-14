@@ -18,7 +18,8 @@ public class AuthUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException(
+                email + " was not found"));
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().name()));
         return new org.springframework.security.core.userdetails.User(
