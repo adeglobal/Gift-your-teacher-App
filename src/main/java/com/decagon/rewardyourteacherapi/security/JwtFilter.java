@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.security;
 
 
+import com.decagon.rewardyourteacherapi.exception.ApplicationException;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -38,8 +39,10 @@ public class JwtFilter extends OncePerRequestFilter {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException | ExpiredJwtException e) {
-                throw  e;
+            } catch (IllegalArgumentException e) {
+                throw  new ApplicationException("Something is wrong, please login again");
+            } catch (ExpiredJwtException e) {
+                throw  new ApplicationException("Sorry, you Token has expired");
             }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
