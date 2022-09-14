@@ -13,6 +13,6 @@ public class RewardExceptionHandler {
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<APIResponse> GenericException(AuthorizationException ex){
         Responder responder =new Responder();
-        return  responder.NotFound(ex.getMessage());
+        return  responder.AuthorizationError(ex.getMessage());
     }
 }

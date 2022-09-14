@@ -29,4 +29,9 @@ public class Responder<T> {
         return  new ResponseEntity<>(new APIResponse(message, true, null), HttpStatus.UNAUTHORIZED);
     }
 
+    public ResponseEntity<APIResponse> AuthorizationError(String resource){
+        return  new ResponseEntity<>(new APIResponse( resource, true, null), HttpStatus.CONFLICT);
+    }
+
+
 }
