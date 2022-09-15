@@ -24,7 +24,6 @@ public class NotificationServiceImp implements NotificationService {
             message = "You have successfully funded you wallet with N"+ transaction.getAmount();
             notification.setUser(transaction.getSender());
             notification.setMessage(message);
-            System.out.println("working a");
             notificationRepository.save(notification);
         }
         else{
@@ -35,8 +34,6 @@ public class NotificationServiceImp implements NotificationService {
             Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"+ transaction.getAmount(),
                     transaction.getSender());
             notificationRepository.save(notification2);
-            Iterable<Notification> not = notificationRepository.findAll();
-            System.out.println(not);
         }
 
     }
