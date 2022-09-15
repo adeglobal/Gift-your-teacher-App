@@ -1,12 +1,14 @@
 package com.decagon.rewardyourteacherapi.security;
 
 
-import io.jsonwebtoken.ExpiredJwtException;
+import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,15 +41,15 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+                throw  new AuthorizationException("Something is wrong, please login again");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                throw  new AuthorizationException("Sorry, you Token has expired");
             }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
         }
 
-        // Once we get the token validate it.
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.authUserService.loadUserByUsername(username);
