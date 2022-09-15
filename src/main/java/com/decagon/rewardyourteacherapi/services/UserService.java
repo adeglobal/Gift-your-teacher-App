@@ -7,7 +7,7 @@ public interface UserService {
 
 
 
-    ResponseEntity login(LoginDto loginDto);
+    String login(LoginDto loginDto);
 }
 
 

@@ -33,7 +33,7 @@ class UserControllerTest {
 
     @Test
     void testLogin() throws Exception {
-        when(userService.login(any())).thenReturn(new ResponseEntity(HttpStatus.OK));
+        when(userService.login(any())).thenReturn("token");
 
         LoginDto loginDto = new LoginDto();
         loginDto.setEmail("global@gmail.com");
