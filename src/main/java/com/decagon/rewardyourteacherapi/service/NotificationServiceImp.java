@@ -18,18 +18,17 @@ public class NotificationServiceImp implements NotificationService {
     }
         @Override
     public void  saveTransactionNotification(Transaction transaction){
-        String message = "";
+        String message;
+        Notification notification = new Notification();
         if(transaction.getSender().getId() == transaction.getRecipient().getId()){
-            Notification notification = new Notification();
-            message = "You have successfully funded you wallet with N"+ transaction.getAmount();
+                message = "You have successfully funded you wallet with N"+ transaction.getAmount();
             notification.setUser(transaction.getSender());
             notification.setMessage(message);
             System.out.println("working a");
             notificationRepository.save(notification);
         }
         else{
-            Notification notification = new Notification();
-            notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
+                notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
             notification.setUser(transaction.getRecipient());
             notificationRepository.save(notification);
             Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"+ transaction.getAmount(),
