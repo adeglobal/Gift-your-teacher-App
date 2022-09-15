@@ -1,14 +1,13 @@
 package com.decagon.rewardyourteacherapi.model;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+//@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,9 +21,16 @@ public class User {
     private String profileImage;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne
+    @JoinColumn(name = "school_id")
+    private School school;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "auth_provider")
-    private AuthenticationProvider authProvider;
 
+    public User(long id, String firstName, String lastName, String email , String password) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 }
