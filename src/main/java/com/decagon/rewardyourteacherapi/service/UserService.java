@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,23 +16,14 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final static String USER_NOT_FOUND_MSG =
             "user with email %s not found";
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
-
-    @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                String.format(USER_NOT_FOUND_MSG, email)));
-    }
 
     public String signUpUser(User user) {
         boolean userExists = userRepository
@@ -44,7 +36,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("email already taken");
         }
 
-        String encodedPassword = bCryptPasswordEncoder
+        String encodedPassword = passwordEncoder
                 .encode(user.getPassword());
 
         user.setPassword(encodedPassword);
@@ -69,7 +61,4 @@ public class UserService implements UserDetailsService {
         return token;
     }
 
-    public int enableUser(String email) {
-        return userRepository.enableUser(email);
-    }
 }

@@ -16,10 +16,4 @@ public interface UserRepository
 
     Optional<User> findByEmail(String email);
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE User a " +
-            "SET a.enabled = TRUE WHERE a.email = ?1")
-    int enableUser(String email);
-
 }
