@@ -36,7 +36,6 @@ public class UserRegistrationService {
                         request.getEmail(),
                         request.getPassword(),
                         Role.STUDENT
-
                 )
         );
 
