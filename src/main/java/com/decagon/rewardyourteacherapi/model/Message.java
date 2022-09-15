@@ -16,13 +16,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
-    private Users sender;
+    private User sender;
     @OneToOne
-    private Users receiver;
+    private User receiver;
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    public Message(Users sender, Users receiver, String content){
+    public Message(User sender, User receiver, String content){
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;

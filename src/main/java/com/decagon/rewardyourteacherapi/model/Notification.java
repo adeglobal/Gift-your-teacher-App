@@ -19,13 +19,13 @@ public class Notification {
     private long id;
     private String message;
     @OneToOne
-    private Users users;
+    private User user;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
 
-    public Notification(String message, Users users){
-        this.users = users;
+    public Notification(String message, User user){
+        this.user = user;
         this.message = message;
     }
 

@@ -22,7 +22,7 @@ public class NotificationServiceImp implements NotificationService {
         if(transaction.getSender().getId() == transaction.getRecipient().getId()){
             Notification notification = new Notification();
             message = "You have successfully funded you wallet with N"+ transaction.getAmount();
-            notification.setUsers(transaction.getSender());
+            notification.setUser(transaction.getSender());
             notification.setMessage(message);
             System.out.println("working a");
             notificationRepository.save(notification);
@@ -30,7 +30,7 @@ public class NotificationServiceImp implements NotificationService {
         else{
             Notification notification = new Notification();
             notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
-            notification.setUsers(transaction.getRecipient());
+            notification.setUser(transaction.getRecipient());
             notificationRepository.save(notification);
             Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"+ transaction.getAmount(),
                     transaction.getSender());
@@ -47,8 +47,8 @@ public class NotificationServiceImp implements NotificationService {
         notificationRepository.save(notification);
     }
 
-    public Notification findNotification(String message, Users users){
-        return notificationRepository.findByMessageAndUsers(message, users).orElse(null);
+    public Notification findNotification(String message, User user){
+        return notificationRepository.findByMessageAndUser(message, user).orElse(null);
     }
 
 

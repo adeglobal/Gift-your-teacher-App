@@ -10,7 +10,7 @@ import javax.persistence.*;
 //@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -26,11 +26,11 @@ public class Users {
     private School school;
 
 
-    public Users(long id, String firstName, String lastName, String email , String password) {
+    public User(long id, String firstName, String lastName, String email , String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.passWord = password;
+        this.password = password;
     }
 }
