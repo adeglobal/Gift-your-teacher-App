@@ -23,7 +23,6 @@ public class Transaction {
     @JoinColumn(name = "recipient_id")
     private Users recipient;
     private BigDecimal amount;
-    private Boolean checked;
 
     public Transaction(Users sender, Users recipient, BigDecimal amount) {
         this.sender = sender;
