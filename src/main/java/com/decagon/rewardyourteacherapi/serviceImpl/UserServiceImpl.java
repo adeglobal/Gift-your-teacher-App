@@ -35,10 +35,8 @@ public class UserServiceImpl implements UserService {
 
 
     public ResponseEntity <APIResponse> login(LoginDto loginDto){
-        System.out.println("Successfully authenticated ");
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if(auth.isAuthenticated()){
-
             String token="Bearer "+jwtService.generateToken(new org.springframework.security.core.userdetails.User(loginDto.getEmail(),loginDto.getPassword(),new ArrayList<>()));
             return  responder.Okay(token);
         }else{

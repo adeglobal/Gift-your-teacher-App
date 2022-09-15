@@ -16,9 +16,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/api/v1/login")
+    @PostMapping("/api/v1/login")
     public ResponseEntity<APIResponse> login(@RequestBody LoginDto loginDto){
-        System.out.println(loginDto.getEmail());
         return  userService.login(loginDto);
     }
 
