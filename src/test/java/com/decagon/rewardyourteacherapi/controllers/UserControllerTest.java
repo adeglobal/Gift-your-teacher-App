@@ -33,7 +33,7 @@ class UserControllerTest {
 
     @Test
     void testLogin() throws Exception {
-        when(userService.login(any())).thenReturn(new ResponseEntity(HttpStatus.CONTINUE));
+        when(userService.login(any())).thenReturn(new ResponseEntity(HttpStatus.OK));
 
         LoginDto loginDto = new LoginDto();
         loginDto.setEmail("global@gmail.com");
@@ -42,10 +42,8 @@ class UserControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
-        Assertions.assertEquals(loginDto.getEmail(), "global@gmail.com");
-        Assertions.assertEquals(loginDto.getPassword(), "1234");
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(100));
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(200));
     }
 }
 
