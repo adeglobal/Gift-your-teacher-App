@@ -14,6 +14,5 @@ public class Message {
     private User receiver;
     @Column(columnDefinition = "TEXT")
     private String content;
-    private Boolean read;
 
 }
