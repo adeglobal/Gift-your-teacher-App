@@ -16,7 +16,8 @@ public class RewardExceptionHandler {
         return  Responder.unAuthorized(ex.getMessage());
     }
 
-    public ResponseEntity<APIResponse> TakenEmailException(UserAlreadyExistsException ex){
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<APIResponse> UserAlreadyExists(UserAlreadyExistsException ex){
         return  Responder.alreadyExists(ex.getMessage());
     }
 }
