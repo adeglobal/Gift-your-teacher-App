@@ -2,7 +2,7 @@ package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
-import com.decagon.rewardyourteacherapi.services.UserService;
+import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.util.Responder;
 
 import lombok.AllArgsConstructor;

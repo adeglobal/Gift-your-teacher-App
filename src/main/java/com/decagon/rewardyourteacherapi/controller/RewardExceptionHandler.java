@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
+import com.decagon.rewardyourteacherapi.exception.TakenEmailException;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.util.Responder;
 import org.springframework.http.ResponseEntity;
@@ -13,5 +14,9 @@ public class RewardExceptionHandler {
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<APIResponse> GenericException(AuthorizationException ex){
         return  Responder.unAuthorized(ex.getMessage());
+    }
+
+    public ResponseEntity<APIResponse> TakenEmailException(TakenEmailException ex){
+        return  Responder.alreadyExists(ex.getMessage());
     }
 }

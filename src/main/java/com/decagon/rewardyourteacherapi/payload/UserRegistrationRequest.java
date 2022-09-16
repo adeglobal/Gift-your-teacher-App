@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.pojos;
+package com.decagon.rewardyourteacherapi.payload;
 
 import com.decagon.rewardyourteacherapi.model.Role;
 import lombok.AllArgsConstructor;

@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import com.decagon.rewardyourteacherapi.controller.UserController;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
-import com.decagon.rewardyourteacherapi.services.UserService;
+import com.decagon.rewardyourteacherapi.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
