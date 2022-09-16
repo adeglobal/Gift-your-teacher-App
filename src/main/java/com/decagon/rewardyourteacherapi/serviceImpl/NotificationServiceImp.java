@@ -1,8 +1,9 @@
-package com.decagon.rewardyourteacherapi.service;
+package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
 import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
+import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -7,6 +7,7 @@ import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
+import com.decagon.rewardyourteacherapi.serviceImpl.NotificationServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
