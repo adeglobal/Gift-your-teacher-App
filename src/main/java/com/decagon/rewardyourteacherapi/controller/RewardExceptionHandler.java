@@ -12,7 +12,6 @@ public class RewardExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<APIResponse> GenericException(AuthorizationException ex){
-        Responder responder =new Responder();
-        return  responder.UnAuthorize(ex.getMessage());
+        return  Responder.unAuthorized(ex.getMessage());
     }
 }

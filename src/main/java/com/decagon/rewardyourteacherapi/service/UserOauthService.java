@@ -27,8 +27,7 @@ public class UserOauthService {
     }
 
 
-
-    public ResponseEntity<APIResponse> authenticateOauth2Student(GoogleAuthUser authPrincipal) {
+    public ResponseEntity<APIResponse> authenticateOauth2User(GoogleAuthUser authPrincipal, Role role) {
         Optional<User> existingUser = repo.findByEmail(authPrincipal.getEmail());
         // if user doesn't exist in db, register
         if(!existingUser.isPresent()){
@@ -37,9 +36,8 @@ public class UserOauthService {
             newStudent.setFirstName(authPrincipal.getFirstName());
             newStudent.setLastName(authPrincipal.getLastName());
             newStudent.setProfileImage(authPrincipal.getImageUrl());
-            newStudent.setRole(Role.STUDENT);
+            newStudent.setRole(role);
             repo.save(newStudent);
-
 
         }
 
@@ -50,27 +48,7 @@ public class UserOauthService {
 
     }
 
-    public ResponseEntity<APIResponse> authenticateOauth2Teacher(GoogleAuthUser authPrincipal) {
-        Optional<User> existingUser = repo.findByEmail(authPrincipal.getEmail());
-        // if user doesn't exist in db, register
-        if(!existingUser.isPresent()){
-            User newTeacher = new User();
-            newTeacher.setEmail(authPrincipal.getEmail());
-            newTeacher.setFirstName(authPrincipal.getFirstName());
-            newTeacher.setLastName(authPrincipal.getLastName());
-            newTeacher.setProfileImage(authPrincipal.getImageUrl());
-            newTeacher.setRole(Role.TEACHER);
-            repo.save(newTeacher);
 
-
-        }
-
-        String token = "Bearer " + JwtService.generateToken
-                (new org.springframework.security.core.userdetails.User(authPrincipal.getEmail(), authPrincipal.getFirstName(),
-                        new ArrayList<>()));
-        return  responder.Okay(token);
-
-    }
 }
 
 
