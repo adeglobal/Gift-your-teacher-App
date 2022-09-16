@@ -4,8 +4,11 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import com.decagon.rewardyourteacherapi.controller.UserController;
+import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
 import com.decagon.rewardyourteacherapi.service.UserService;
+import com.decagon.rewardyourteacherapi.util.Responder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +40,23 @@ class UserControllerTest {
         loginDto.setEmail("global@gmail.com");
         loginDto.setPassword("1234");
         String content = (new ObjectMapper()).writeValueAsString(loginDto);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(200));
+    }
+
+    @Test
+    void testSigUpUser() throws Exception {
+        User user = new User();
+        user.setRole(Role.TEACHER);
+        user.setPassword("pass");
+        user.setFirstName("george");
+        user.setLastName("king");
+        user.setEmail("test@gamil.com");
+        String content = (new ObjectMapper()).writeValueAsString(user);
+        when(userService.signUpUser(any())).thenReturn(Responder.okay(user));
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);

@@ -2,7 +2,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
-import com.decagon.rewardyourteacherapi.exception.TakenEmailException;
+import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 .isPresent();
 
         if (userExists) {
-            throw new TakenEmailException(String.format("Email %s has been taken", user.getEmail()));
+            throw new UserAlreadyExistsException(String.format("Email %s has been taken", user.getEmail()));
         }
 
         String encodedPassword = passwordEncoder
