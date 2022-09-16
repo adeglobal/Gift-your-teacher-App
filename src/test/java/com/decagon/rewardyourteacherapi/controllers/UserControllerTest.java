@@ -1,13 +1,11 @@
 package com.decagon.rewardyourteacherapi.controllers;
 
 import com.decagon.rewardyourteacherapi.controller.UserController;
-import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.service.UserService;
-import com.decagon.rewardyourteacherapi.util.Responder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -34,8 +31,6 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    @MockBean
-    private UserRepository userRepository;
 
     @Test
     void testLogin() throws Exception {
