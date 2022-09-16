@@ -16,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -42,24 +41,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/v1/login/**","/api/v1/register/**", "/index")
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**",
+                        "/index","/api/oauth2/student/callback","/api/oauth2/teacher/callback")
                 .permitAll()
-                .antMatchers("/api/**", "/api/v1/logout").authenticated()
-                .and()
+                .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().logout()
-                .logoutUrl("/api/v1/logout")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/logout"))
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true)
-                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setStatus(200);
-                })
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
         super.configure(http);
     }
 
@@ -90,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "google.com","facebook.com"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8081", "google.com","facebook.com"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET","PUT","POST","UPDATE","DELETE"));
         corsConfiguration.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", corsConfiguration); // Global for all paths
