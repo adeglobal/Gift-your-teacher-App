@@ -11,7 +11,7 @@ public interface UserService {
 
     String login(LoginDto loginDto);
 
-    ResponseEntity<APIResponse> signUpUser(User user);
+    User signUpUser(User user);
 }
 
 

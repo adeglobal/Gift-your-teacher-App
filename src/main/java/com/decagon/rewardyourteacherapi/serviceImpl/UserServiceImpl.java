@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public ResponseEntity<APIResponse> signUpUser(User user) {
+    public User signUpUser(User user) {
         boolean userExists = userRepository
                 .findByEmail(user.getEmail())
                 .isPresent();
@@ -55,8 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
-
-        return Responder.okay(user);
+        return user;
     }
 
 }
