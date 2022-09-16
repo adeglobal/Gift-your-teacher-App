@@ -23,7 +23,7 @@ public class UserOauthService {
     private UserRepository repo;
 
     public UserOauthService() {
-        responder = new Responder<>();
+        responder = new Responder();
     }
 
 
@@ -44,7 +44,7 @@ public class UserOauthService {
             String token = "Bearer " + JwtService.generateToken
                     (new org.springframework.security.core.userdetails.User(authPrincipal.getEmail(), authPrincipal.getFirstName(),
                             new ArrayList<>()));
-            return  responder.Okay(token);
+            return  Responder.okay(token);
 
     }
 
