@@ -1,5 +1,6 @@
-package com.decagon.rewardyourteacherapi.controllers;
+package com.decagon.rewardyourteacherapi.controller;
 
+import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.pojos.UserRegistrationRequest;
 import com.decagon.rewardyourteacherapi.service.UserRegistrationService;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,15 @@ public class UserRegistrationController {
 
     private final UserRegistrationService userRegistrationService;
 
-    @PostMapping
-    public String register(@RequestBody UserRegistrationRequest request) {
+    @PostMapping(path  ="/student")
+    public String registerLocal(@RequestBody UserRegistrationRequest request) {
+        request.setRole(Role.STUDENT);
         return userRegistrationService.register(request);
     }
 
+    @PostMapping(path  ="/teacher")
+    public String registerGoogle(@RequestBody UserRegistrationRequest request) {
+        request.setRole(Role.TEACHER);
+        return userRegistrationService.register(request);
+    }
 }

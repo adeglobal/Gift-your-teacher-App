@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.controllers;
+package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
