@@ -18,13 +18,9 @@ import java.util.Optional;
 
 @Service
 public class UserOauthService {
-    private final Responder responder;
+
     @Autowired
     private UserRepository repo;
-
-    public UserOauthService() {
-        responder = new Responder();
-    }
 
 
     public ResponseEntity<APIResponse> authenticateOauth2User(GoogleAuthUser authPrincipal, Role role) {
