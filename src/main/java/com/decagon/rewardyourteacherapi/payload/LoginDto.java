@@ -2,8 +2,9 @@ package com.decagon.rewardyourteacherapi.payload;
 
 import lombok.Data;
 
+
 @Data
-public class AuthRequest {
+public class LoginDto {
     private String email;
     private  String password;
 }

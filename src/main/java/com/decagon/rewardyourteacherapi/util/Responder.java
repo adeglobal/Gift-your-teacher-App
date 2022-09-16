@@ -2,30 +2,29 @@ package com.decagon.rewardyourteacherapi.util;
 
 
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
-import lombok.AllArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@AllArgsConstructor
-public class Responder<T> {
+public class Responder {
 
-    public ResponseEntity<APIResponse> Okay(T response){
+    public static ResponseEntity<APIResponse> okay(Object response){
         return  new  ResponseEntity<>(new APIResponse("Request Successful", true, response), HttpStatus.OK);
     }
 
-    public ResponseEntity<APIResponse> NotFound(String resource){
+    public static ResponseEntity<APIResponse> notFound(String resource){
         return  new ResponseEntity<>(new APIResponse("Requested " + resource
                 + " Was Not Found", true, null), HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<APIResponse> AlreadyExist(String message){
+    public static ResponseEntity<APIResponse> alreadyExists(String message){
         return  new ResponseEntity<>(new APIResponse(message, true, null), HttpStatus.CONFLICT);
     }
 
-    public ResponseEntity<APIResponse> UnAuthorize(String message){
+    public static ResponseEntity<APIResponse> unAuthorized(String message){
         return  new ResponseEntity<>(new APIResponse(message, true, null), HttpStatus.UNAUTHORIZED);
     }
 

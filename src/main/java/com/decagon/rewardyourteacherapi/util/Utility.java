@@ -10,6 +10,7 @@ import java.util.Random;
 @AllArgsConstructor
 public class Utility {
 
+    // This method randomly generates string for uuid for user
     public String generateUniqueId() {
         String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk"
                 + "lmnopqrstuvwxyz!@#$%&";
