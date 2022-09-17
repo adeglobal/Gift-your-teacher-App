@@ -1,10 +1,9 @@
 package com.decagon.rewardyourteacherapi.controllers;
 
-import com.decagon.rewardyourteacherapi.controller.UserController;
+import com.decagon.rewardyourteacherapi.controller.UserLoginController;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDto;
-import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -22,11 +21,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {UserController.class})
+@ContextConfiguration(classes = {UserLoginController.class})
 @ExtendWith(SpringExtension.class)
 class UserControllerTest {
     @Autowired
-    private UserController userController;
+    private UserLoginController userController;
 
     @MockBean
     private UserService userService;

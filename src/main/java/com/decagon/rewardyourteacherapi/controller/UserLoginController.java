@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-public class UserController {
+public class UserLoginController {
 
     private final UserService userService;
 

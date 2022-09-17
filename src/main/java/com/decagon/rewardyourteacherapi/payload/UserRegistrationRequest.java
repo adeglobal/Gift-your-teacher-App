@@ -11,9 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class UserRegistrationRequest {
-    private final String firstname;
-    private final String lastname;
-    private final String email;
-    private final String password;
-    private  Role role;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String password;
+    private Role role;
+    private String imageUrl;
 }
