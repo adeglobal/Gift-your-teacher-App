@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class NotificationServiceImp implements NotificationService {
 
 
-     final NotificationRepository notificationRepository;
+    final NotificationRepository notificationRepository;
     @Autowired
     public NotificationServiceImp(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
