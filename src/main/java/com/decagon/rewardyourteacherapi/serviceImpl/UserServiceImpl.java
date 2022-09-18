@@ -4,10 +4,9 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
-import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
-import com.decagon.rewardyourteacherapi.payload.LoginDto;
-import com.decagon.rewardyourteacherapi.payload.UserRegistrationRequest;
+import com.decagon.rewardyourteacherapi.payload.LoginDTO;
+import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -31,11 +30,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public String login(LoginDto loginDto){
+    public String login(LoginDTO loginDto){
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if(auth.isAuthenticated()){
-            String token="Bearer "+jwtService.generateToken(new org.springframework.security.core.userdetails.User(loginDto.getEmail(),loginDto.getPassword(),new ArrayList<>()));
-            return  token;
+            return "Bearer "+jwtService.generateToken(new org.springframework.security.core.userdetails.User(loginDto.getEmail(),loginDto.getPassword(),new ArrayList<>()));
         }else{
             throw new AuthorizationException("Not Authenticated ");
         }
@@ -56,16 +54,15 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public String authenticateOauth2User(UserRegistrationRequest request) {
+    public String authenticateOauth2User(UserRegistrationDTO request) {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
-        if(!existingUser.isPresent()){
+        if(existingUser.isEmpty()){
             User newUser = PayloadToModel.MapRequestToUser(request);
             userRepository.save(newUser);
         }
-        String token = "Bearer " + JwtService.generateToken
+        return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getFirstname(),
                         new ArrayList<>()));
-        return  token;
     }
 
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode
-public class UserRegistrationRequest {
+public class UserRegistrationDTO {
     private String firstname;
     private String lastname;
     private String email;

@@ -1,7 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
-import com.decagon.rewardyourteacherapi.payload.LoginDto;
+import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.util.Responder;
 
@@ -19,7 +19,7 @@ public class UserLoginController {
     private final UserService userService;
 
     @PostMapping("/api/v1/login")
-    public ResponseEntity<APIResponse> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<APIResponse> login(@RequestBody LoginDTO loginDto){
         return  Responder.okay(userService.login(loginDto));
     }
 

@@ -3,7 +3,7 @@ package com.decagon.rewardyourteacherapi.controllers;
 import com.decagon.rewardyourteacherapi.controller.UserLoginController;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
-import com.decagon.rewardyourteacherapi.payload.LoginDto;
+import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class UserControllerTest {
     void testLogin() throws Exception {
         when(userService.login(any())).thenReturn("token");
 
-        LoginDto loginDto = new LoginDto();
+        LoginDTO loginDto = new LoginDTO();
         loginDto.setEmail("global@gmail.com");
         loginDto.setPassword("1234");
         String content = (new ObjectMapper()).writeValueAsString(loginDto);
