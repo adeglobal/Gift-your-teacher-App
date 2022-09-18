@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class NotificationServiceImp implements NotificationService {
 
 
-     final NotificationRepository notificationRepository;
+    final NotificationRepository notificationRepository;
     @Autowired
     public NotificationServiceImp(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
@@ -20,19 +20,19 @@ public class NotificationServiceImp implements NotificationService {
         @Override
     public void  saveTransactionNotification(Transaction transaction){
         String message = "";
-        if(transaction.getSender().getId() == transaction.getRecipient().getId()){
             Notification notification = new Notification();
-            message = "You have successfully funded you wallet with N"+ transaction.getAmount();
+            if(transaction.getSender().getId() == transaction.getRecipient().getId()){
+                message = "You have successfully funded you wallet with N"+ transaction.getAmount();
             notification.setUser(transaction.getSender());
             notification.setMessage(message);
             notificationRepository.save(notification);
         }
         else{
-            Notification notification = new Notification();
-            notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
+                notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
             notification.setUser(transaction.getRecipient());
             notificationRepository.save(notification);
-            Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"+ transaction.getAmount(),
+            Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"
+                    + transaction.getAmount(),
                     transaction.getSender());
             notificationRepository.save(notification2);
         }
