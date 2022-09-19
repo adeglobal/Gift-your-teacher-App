@@ -4,6 +4,8 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
+import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.model.School;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
@@ -11,6 +13,9 @@ import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,6 +68,19 @@ public class UserServiceImpl implements UserService {
         return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getFirstname(),
                         new ArrayList<>()));
+    }
+
+    @Override
+    public Page<User> getSchoolTeachers(Long id, int page, int size) {
+        if(page < 0){
+            page = 0;
+        }
+        if(size < 1){
+            size = 1;
+        }
+        Pageable paging = PageRequest.of(page, size);
+        School school = new School(id);
+        return userRepository.findAllBySchoolAndRole(school, Role.TEACHER, paging);
     }
 
 }

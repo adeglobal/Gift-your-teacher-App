@@ -1,8 +1,10 @@
 package com.decagon.rewardyourteacherapi.service;
 
+import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +15,8 @@ public interface UserService {
     User signUpUser(User user);
 
     String authenticateOauth2User(UserRegistrationDTO request);
+
+    Page<User> getSchoolTeachers(Long id, int page, int size);
 }
 
 
