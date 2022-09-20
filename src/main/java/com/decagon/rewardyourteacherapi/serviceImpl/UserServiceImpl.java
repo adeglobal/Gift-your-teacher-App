@@ -78,9 +78,9 @@ public class UserServiceImpl implements UserService {
 
         if (user.isPresent()){
             Optional<Wallet> wallet = walletRepository.findWalletById(user.get().getId());
-//            System.out.println("Wallet: "+wallet);
+
             if(wallet.isPresent()){
-                System.out.println("Wallet Balance of "+wallet.get().getUserId().getEmail() +" is : "+wallet.get().getTotal());
+
                 return wallet.get().getTotal();
             }
         }
