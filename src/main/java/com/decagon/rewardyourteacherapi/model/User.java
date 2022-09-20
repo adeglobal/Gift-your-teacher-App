@@ -41,4 +41,10 @@ public class User {
         this.password = password;
     }
 
+    public User(long id, String firstName, String lastName, String profileImage) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profileImage = profileImage;
+    }
 }

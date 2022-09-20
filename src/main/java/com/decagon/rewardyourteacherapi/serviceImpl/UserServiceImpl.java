@@ -81,8 +81,8 @@ public class UserServiceImpl implements UserService {
         if (userRegistrationDTO.getPassword()!=null){
             newUserDetails.setPassword(userRegistrationDTO.getPassword());
         }
-        if (userRegistrationDTO.getImageUrl()!= null){
-            newUserDetails.setProfileImage (userRegistrationDTO.getImageUrl());
+        if (userRegistrationDTO.getImageUrl()!= null) {
+            newUserDetails.setProfileImage(userRegistrationDTO.getImageUrl());
         }
 
       return userRepository.save(newUserDetails);

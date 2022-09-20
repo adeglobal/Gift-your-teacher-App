@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.RewardYourTeacherApiApplication;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
+import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -18,7 +19,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
+
+import static com.decagon.rewardyourteacherapi.model.Role.TEACHER;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RewardYourTeacherApiApplication.class)
 
@@ -28,6 +36,9 @@ class UserServiceImplTest {
     UserService userService;
     @Autowired
     UserRepository userRepository;
+
+    @MockBean
+    UserRepository mUserRepository;
     @MockBean
     AuthenticationManager authenticationManager;
     @MockBean
@@ -35,7 +46,21 @@ class UserServiceImplTest {
     @MockBean
     PasswordEncoder passwordEncoder;
 
-    User user2 = new User( "george", "victim", "test2@gamil.com", "password", Role.TEACHER);
+    User user2 = new User( "george", "victim", "test2@gamil.com", "password", TEACHER);
+
+
+
+    @Test
+    void updateUserProfile(){
+        userService = new UserServiceImpl( authenticationManager, jwtService, userRepository, passwordEncoder);
+        User uUser = new User(1l,"george", "victim", "bla.png");
+        Assertions.assertEquals("george", uUser.getFirstName());
+        UserRegistrationDTO modified = new UserRegistrationDTO("King george", "Duren", "newimage.png");
+        when(mUserRepository.findById(anyLong())).thenReturn(Optional.of(uUser));
+        when(mUserRepository.save(any(User.class))).thenReturn(uUser);
+        Assertions.assertEquals("King george", userService.updateUserProfile(modified, 1L).getFirstName());
+    }
+
 
     @Test
     void SignUpUser(){
@@ -51,5 +76,7 @@ class UserServiceImplTest {
         assertTrue(actualMessage.contains(expectedMessage));
 
     }
+
+
 
 }
