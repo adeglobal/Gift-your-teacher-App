@@ -10,6 +10,6 @@ import java.util.List;
 public interface SearchTeacherRepository extends JpaRepository<User, Long> {
 
 
-    List<User> findUserByRoleAndAndLastNameAndId(Role role, String lastName, Long id);
+    List<User> findUserByRoleAndAndLastNameAndId(String teacher, String lastName, Long id);
 
 }

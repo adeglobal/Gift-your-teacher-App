@@ -20,8 +20,8 @@ public class SearchTeacherServiceImp implements SearchTeacherService {
         this.searchTeacherRepository = searchTeacherRepository;
     }
 
-    public SearchTeacherResponse searchTeacher(Role role, String name, Long id){
-        List<User> userList = searchTeacherRepository.findUserByRoleAndAndLastNameAndId(role,name,id);
+    public SearchTeacherResponse searchTeacher(String teacher, String name, Long id){
+        List<User> userList = searchTeacherRepository.findUserByRoleAndAndLastNameAndId(teacher,name,id);
         return new SearchTeacherResponse("Success", LocalDateTime.now(),userList);
 
     }

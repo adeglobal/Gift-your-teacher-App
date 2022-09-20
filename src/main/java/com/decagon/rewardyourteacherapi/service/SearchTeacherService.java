@@ -12,5 +12,5 @@ import java.util.List;
 @Component
 public interface SearchTeacherService {
 
-    SearchTeacherResponse searchTeacher(Role role, String name, Long id);
+    SearchTeacherResponse searchTeacher(String teacher, String name, Long id);
 }
