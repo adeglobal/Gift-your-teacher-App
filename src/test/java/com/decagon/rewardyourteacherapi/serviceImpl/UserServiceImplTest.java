@@ -38,8 +38,6 @@ class UserServiceImplTest {
     UserRepository userRepository;
 
     @MockBean
-    UserRepository mUserRepository;
-    @MockBean
     AuthenticationManager authenticationManager;
     @MockBean
     JwtService jwtService;
@@ -50,14 +48,13 @@ class UserServiceImplTest {
 
 
 
+
     @Test
     void updateUserProfile(){
         userService = new UserServiceImpl( authenticationManager, jwtService, userRepository, passwordEncoder);
-        User uUser = new User(1l,"george", "victim", "bla.png");
-        Assertions.assertEquals("george", uUser.getFirstName());
+        User uUser = new User("george", "victim",passwordEncoder.encode("this"), "bla.png", Role.STUDENT);
+        userRepository.save(uUser);
         UserRegistrationDTO modified = new UserRegistrationDTO("King george", "Duren", "newimage.png");
-        when(mUserRepository.findById(anyLong())).thenReturn(Optional.of(uUser));
-        when(mUserRepository.save(any(User.class))).thenReturn(uUser);
         Assertions.assertEquals("King george", userService.updateUserProfile(modified, 1L).getFirstName());
     }
 
@@ -66,9 +63,7 @@ class UserServiceImplTest {
     void SignUpUser(){
         userService =  new UserServiceImpl(authenticationManager, jwtService, userRepository, passwordEncoder);
         Assertions.assertEquals(user2, userService.signUpUser(user2));
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            userService.signUpUser(user2);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.signUpUser(user2));
 
         String expectedMessage = "Email test2@gamil.com has been taken";
         String actualMessage = exception.getMessage();
