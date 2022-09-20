@@ -6,6 +6,7 @@ import com.decagon.rewardyourteacherapi.repository.SchoolRepository;
 import com.decagon.rewardyourteacherapi.service.SchoolService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public List<SchoolResponse> retrieveSchools(int page, int size) {
+    public Page<SchoolResponse> retrieveSchools(int page, int size) {
         Page<School> schools = repo.findAll(PageRequest.of(page,size));
        List<SchoolResponse> schoolResponses = new ArrayList<>();
         schools.forEach(school2->{
@@ -40,6 +41,8 @@ public class SchoolServiceImpl implements SchoolService {
             schoolResponses.add(schoolResponse);
 
         });
-        return schoolResponses;
+        Page<SchoolResponse> page1 = new PageImpl<>(schoolResponses, PageRequest.of(page, size), schoolResponses.size());
+
+        return page1;
     }
 }

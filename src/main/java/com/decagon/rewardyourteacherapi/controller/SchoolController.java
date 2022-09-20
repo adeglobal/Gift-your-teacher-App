@@ -20,7 +20,7 @@ public class SchoolController {
     private final SchoolService service;
 
     @GetMapping("/retrieveSchools")
-    public ResponseEntity<List<SchoolResponse>> retrieveSchools(@RequestParam("schoolPage") int page, @RequestParam("schoolSize") int size){
-        return ResponseEntity.ok(service.retrieveSchools(page, size));
+    public ResponseEntity<APIResponse> retrieveSchools(@RequestParam("schoolPage") int page, @RequestParam("schoolSize") int size){
+        return Responder.okay(service.retrieveSchools(page, size));
     }
 }

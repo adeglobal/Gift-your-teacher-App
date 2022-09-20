@@ -10,6 +10,6 @@ public interface SchoolService {
     int getSchools();
     List<School> saveSchools(List<School> school);
 
-    List<SchoolResponse> retrieveSchools(int page, int size);
+    Page<SchoolResponse> retrieveSchools(int page, int size);
 
 }
