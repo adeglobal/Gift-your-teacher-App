@@ -1,13 +1,11 @@
 package com.decagon.rewardyourteacherapi.payload;
 
 import com.decagon.rewardyourteacherapi.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Data
 @AllArgsConstructor
 @EqualsAndHashCode
 public class UserRegistrationDTO {

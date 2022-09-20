@@ -13,6 +13,10 @@ public interface UserService {
     User signUpUser(User user);
 
     String authenticateOauth2User(UserRegistrationDTO request);
+
+//    User getProfileById( long id);
+
+    User updateUserProfile(UserRegistrationDTO request, long id);
 }
 
 

@@ -1,11 +1,11 @@
 package com.decagon.rewardyourteacherapi.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+@Getter
+@Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

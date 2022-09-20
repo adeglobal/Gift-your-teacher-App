@@ -3,6 +3,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
+import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
@@ -11,9 +12,11 @@ import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
+@ToString
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -63,6 +67,26 @@ public class UserServiceImpl implements UserService {
         return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getFirstname(),
                         new ArrayList<>()));
+    }
+    public User updateUserProfile (UserRegistrationDTO userRegistrationDTO, long id){
+        System.out.println(userRegistrationDTO + "" + id);
+        User newUserDetails =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+//        System.out.println(newUserDetails);
+        if(userRegistrationDTO.getFirstname()!=null){
+            newUserDetails.setFirstName(userRegistrationDTO.getFirstname());
+        }
+        if (userRegistrationDTO.getLastname()!=null){
+            newUserDetails.setLastName(userRegistrationDTO.getLastname());
+        }
+        if (userRegistrationDTO.getPassword()!=null){
+            newUserDetails.setPassword(userRegistrationDTO.getPassword());
+        }
+        if (userRegistrationDTO.getImageUrl()!= null){
+            newUserDetails.setProfileImage (userRegistrationDTO.getImageUrl());
+        }
+
+      return userRepository.save(newUserDetails);
+
     }
 
 }
