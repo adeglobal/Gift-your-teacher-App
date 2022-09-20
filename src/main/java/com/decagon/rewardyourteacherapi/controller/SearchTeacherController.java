@@ -1,9 +1,8 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.model.Role;
-
-import com.decagon.rewardyourteacherapi.payload.SearchTeacherResponse;
+import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.service.SearchTeacherService;
+import com.decagon.rewardyourteacherapi.util.Responder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +16,8 @@ public class SearchTeacherController {
     public SearchTeacherController(SearchTeacherService searchTeacherService) {
         this.searchTeacherService = searchTeacherService;
     }
-    @GetMapping(value = "/search")
-    public ResponseEntity <SearchTeacherResponse> searchTeacher(@PathVariable(value = "teacher")String teacher,
-                                                                @PathVariable(value = "name")String name,
-                                                                @PathVariable(value = "id")long id){
-       
-       return ResponseEntity.ok().body(searchTeacherService.searchTeacher(teacher,name,id));
+    @GetMapping(value = "/search={name}")
+    public ResponseEntity <APIResponse> searchTeacher(@PathVariable(value = "name")String name){
+       return Responder.okay(searchTeacherService.searchTeacher(name));
     }
 }

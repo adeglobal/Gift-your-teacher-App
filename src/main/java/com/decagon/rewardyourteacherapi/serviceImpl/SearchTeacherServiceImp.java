@@ -1,28 +1,23 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.model.Role;
-import com.decagon.rewardyourteacherapi.model.School;
 import com.decagon.rewardyourteacherapi.model.User;
-import com.decagon.rewardyourteacherapi.payload.APIResponse;
-import com.decagon.rewardyourteacherapi.payload.SearchTeacherResponse;
-import com.decagon.rewardyourteacherapi.repository.SearchTeacherRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.service.SearchTeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
+@Service
 public class SearchTeacherServiceImp implements SearchTeacherService {
-    private SearchTeacherRepository searchTeacherRepository;
+    private UserRepository userRepository;
     @Autowired
-    public SearchTeacherServiceImp(SearchTeacherRepository searchTeacherRepository) {
-        this.searchTeacherRepository = searchTeacherRepository;
+    public SearchTeacherServiceImp(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public SearchTeacherResponse searchTeacher(String teacher, String name, Long id){
-        List<User> userList = searchTeacherRepository.findUserByRoleAndAndLastNameAndId(teacher,name,id);
-        return new SearchTeacherResponse("Success", LocalDateTime.now(),userList);
+    public List<User> searchTeacher(String name){
+        return userRepository.findUsersByRoleAndAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(Role.TEACHER,name, name);
 
     }
 }
