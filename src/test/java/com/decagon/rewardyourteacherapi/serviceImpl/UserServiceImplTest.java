@@ -14,9 +14,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
@@ -44,12 +51,18 @@ class UserServiceImplTest {
         Exception exception = assertThrows(RuntimeException.class, () -> {
             userService.signUpUser(user2);
         });
-
         String expectedMessage = "Email test2@gamil.com has been taken";
         String actualMessage = exception.getMessage();
-
         assertTrue(actualMessage.contains(expectedMessage));
+    }
 
+    @Test
+    void getSchoolTeachers(){
+        Pageable pageable = PageRequest.of(0, 5);
+        List<User> list= new ArrayList<>();
+        Page<User> page = new PageImpl<>(list, pageable, list.size());
+        userService =  new UserServiceImpl(authenticationManager, jwtService, userRepository, passwordEncoder);
+        Assertions.assertEquals(page, userService.getSchoolTeachers(1L, 0,5));
     }
 
 }
