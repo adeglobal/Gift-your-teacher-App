@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public class SearchTeacherServiceImp implements SearchTeacherService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     @Autowired
     public SearchTeacherServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public List<User> searchTeacher(String name){
-        return userRepository.findUsersByRoleAndAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(Role.TEACHER,name, name);
+        return userRepository.findUsersByRoleAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(Role.TEACHER,name, name);
 
     }
 }

@@ -7,7 +7,8 @@ import lombok.*;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class UserRegistrationDTO {
+public class UserDTO {
+    private Long id;
     private String firstname;
     private String lastname;
     private String email;
@@ -15,7 +16,13 @@ public class UserRegistrationDTO {
     private Role role;
     private String imageUrl;
 
-    public UserRegistrationDTO(String firstname, String lastname, String imageUrl) {
+    public UserDTO(Long id, String firstname, String lastname, String imageUrl) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.imageUrl = imageUrl;
+    }
+    public UserDTO(String firstname, String lastname, String imageUrl) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.imageUrl = imageUrl;

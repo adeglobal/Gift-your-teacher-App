@@ -2,7 +2,8 @@ package com.decagon.rewardyourteacherapi.service;
 
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
-import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
+import com.decagon.rewardyourteacherapi.payload.UserDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,9 +15,11 @@ public interface UserService {
 
     User signUpUser(User user);
 
-    String authenticateOauth2User(UserRegistrationDTO request);
+    String authenticateOauth2User(UserDTO request);
 
-    User updateUserProfile(UserRegistrationDTO request, long id);
+    Page<UserDTO> getSchoolTeachers(Long id, int page, int size);
+
+    User updateUserProfile(UserDTO request, long id);
 
     BigDecimal getCurrentWalletBalance(Long id);
 }

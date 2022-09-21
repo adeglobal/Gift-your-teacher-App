@@ -29,9 +29,12 @@ public class Transaction {
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
 
-    public Transaction(User sender, User recipient, BigDecimal amount) {
+    public Transaction(long id, User sender, User recipient, BigDecimal amount) {
+        this.id = id;
         this.sender = sender;
         this.recipient = recipient;
         this.amount = amount;
     }
+
+
 }
