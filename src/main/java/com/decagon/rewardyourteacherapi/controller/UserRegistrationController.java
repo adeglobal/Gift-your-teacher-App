@@ -43,19 +43,4 @@ public class UserRegistrationController {
         request.setPassword("");
         return Responder.okay(userService.authenticateOauth2User(request));
     }
-
-    @PostMapping(value = "/edit/teacher{id}")
-    public ResponseEntity<APIResponse> editProfile(@PathVariable(name = "id") long id, @RequestBody UserRegistrationDTO request) {
-        request.setRole(Role.TEACHER);
-        long userId = (id);
-        return Responder.okay(userService.updateUserProfile(request, userId));
-    }
-
-    @PostMapping(value = "/edit/student/{id}")
-    public ResponseEntity<APIResponse> editStudentProfile(@PathVariable(name = "id") long id, @RequestBody UserRegistrationDTO request) {
-        request.setRole(Role.STUDENT);
-        long userId = (id);
-        return Responder.okay(userService.updateUserProfile(request, userId));
-
-    }
 }

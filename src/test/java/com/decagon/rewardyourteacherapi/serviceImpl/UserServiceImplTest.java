@@ -6,6 +6,7 @@ import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
+import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -44,6 +45,9 @@ class UserServiceImplTest {
     @MockBean
     PasswordEncoder passwordEncoder;
 
+    @MockBean
+    WalletRepository walletRepository;
+
     User user2 = new User( "george", "victim", "test2@gamil.com", "password", TEACHER);
 
 
@@ -51,7 +55,7 @@ class UserServiceImplTest {
 
     @Test
     void updateUserProfile(){
-        userService = new UserServiceImpl( authenticationManager, jwtService, userRepository, passwordEncoder);
+        userService = new UserServiceImpl( authenticationManager, jwtService, userRepository, walletRepository, passwordEncoder);
         User uUser = new User("george", "victim",passwordEncoder.encode("this"), "bla.png", Role.STUDENT);
         userRepository.save(uUser);
         UserRegistrationDTO modified = new UserRegistrationDTO("King george", "Duren", "newimage.png");
@@ -61,7 +65,7 @@ class UserServiceImplTest {
 
     @Test
     void SignUpUser(){
-        userService =  new UserServiceImpl(authenticationManager, jwtService, userRepository, passwordEncoder);
+        userService =  new UserServiceImpl(authenticationManager, jwtService, userRepository, walletRepository, passwordEncoder);
         Assertions.assertEquals(user2, userService.signUpUser(user2));
         Exception exception = assertThrows(RuntimeException.class, () -> userService.signUpUser(user2));
 

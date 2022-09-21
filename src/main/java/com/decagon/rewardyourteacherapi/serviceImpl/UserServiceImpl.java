@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserRepository userRepository;
-
     private final WalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
 
