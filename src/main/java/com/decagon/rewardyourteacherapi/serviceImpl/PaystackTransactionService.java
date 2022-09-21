@@ -1,6 +1,9 @@
-package com.decagon.rewardyourteacherapi.util;
+package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
+import com.decagon.rewardyourteacherapi.util.InitializeTransactionRequest;
+import com.decagon.rewardyourteacherapi.util.InitializeTransactionResponse;
+import com.decagon.rewardyourteacherapi.util.VerifyTransactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -20,9 +23,9 @@ import java.io.InputStreamReader;
 @Service
 @Transactional
 @AllArgsConstructor
-public class ImplementTransactionService {
+public class PaystackTransactionService {
     public InitializeTransactionResponse initTransaction(InitializeTransactionRequest request) throws Exception {
-        InitializeTransactionResponse initializeTransactionResponse = null;
+        InitializeTransactionResponse initializeTransactionResponse;
         try {
             // convert transaction to json then use it as a body to post json
             Gson gson = new Gson();
