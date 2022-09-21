@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                . logout()
+                .logout()
                 .logoutUrl("/api/v1/logout")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/logout"))
                 .clearAuthentication(true)
