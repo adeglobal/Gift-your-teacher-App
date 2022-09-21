@@ -43,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**",
-                        "/index","/api/oauth2/student/callback", "/app/**","/api/oauth2/teacher/callback")
-                        "/index","/api/oauth2/student/callback","/api/oauth2/teacher/callback","/api/v1/school/**")
+                        "/index","/api/oauth2/student/callback", "/app/**","/api/oauth2/teacher/callback", "/api/v1/school/**")
                 .permitAll()
                 .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -55,9 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setStatus(200);
-                })
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.setStatus(200))
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         super.configure(http);
