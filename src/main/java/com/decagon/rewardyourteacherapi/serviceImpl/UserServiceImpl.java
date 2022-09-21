@@ -4,6 +4,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
+import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
@@ -14,6 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+//    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//   String email = ((UserDetails)principal).getUsername();
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -63,6 +68,18 @@ public class UserServiceImpl implements UserService {
         return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getFirstname(),
                         new ArrayList<>()));
+    }
+    @Override
+   public User viewTeacherProfileByEmail(String email){
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String email = ((UserDetails)principal).getUsername();
+
+        return userRepository.findUserByEmailAndRole(email, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    }
+
+    @Override
+    public User viewTeacherProfileById(Long id) {
+        return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
     }
 
 }

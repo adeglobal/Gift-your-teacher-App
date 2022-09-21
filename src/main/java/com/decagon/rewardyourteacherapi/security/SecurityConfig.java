@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**",
-                        "/index","/api/oauth2/student/callback","/api/oauth2/teacher/callback")
+                        "/index","/api/oauth2/student/callback","/api/oauth2/teacher/callback","/api/v1/viewSingleTeacherByEmail","/api/v1/viewSingleTeacherById")
                 .permitAll()
                 .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -98,4 +98,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
+
 }

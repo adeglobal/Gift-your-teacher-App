@@ -5,7 +5,6 @@ import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface UserService {
 
     String login(LoginDTO loginDto);
@@ -13,6 +12,13 @@ public interface UserService {
     User signUpUser(User user);
 
     String authenticateOauth2User(UserRegistrationDTO request);
+
+    User viewTeacherProfileByEmail(String email);
+
+    User viewTeacherProfileById(Long id);
+
+
+
 }
 
 
