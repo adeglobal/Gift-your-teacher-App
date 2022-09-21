@@ -29,6 +29,8 @@ public class UserRegistrationController {
     @PostMapping("/student/callback")
     public ResponseEntity<APIResponse> authenticateOauth2User(@RequestBody UserDTO request){
         request.setRole(Role.STUDENT);
+        request.setPassword("");
+        System.out.println(request.getFirstname()+" "+request.getLastname());
         return Responder.okay(userService.authenticateOauth2User(request));
     }
 
@@ -41,6 +43,7 @@ public class UserRegistrationController {
     @PostMapping("/teacher/callback")
     public ResponseEntity<APIResponse> authenticateOauth2Teacher(@RequestBody UserDTO request){
         request.setRole(Role.TEACHER);
+        request.setPassword("");
         return Responder.okay(userService.authenticateOauth2User(request));
     }
 }
