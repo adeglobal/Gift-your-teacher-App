@@ -20,4 +20,9 @@ public class School{
     private String schoolType;
     private String schoolAddress;
     private String schoolCity;
-    private String schoolState;}
+    private String schoolState;
+
+    public School(long id) {
+        this.id = id;
+    }
+}
