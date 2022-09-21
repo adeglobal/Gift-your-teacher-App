@@ -24,6 +24,13 @@ public interface UserService {
     BigDecimal getCurrentWalletBalance(Long id);
 
     Page<User> retrieveTeachers(int page, int size);
+
+    User viewTeacherProfileByEmail(String email);
+
+    User viewTeacherProfileById(Long id);
+
+
+
 }
 
 

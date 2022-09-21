@@ -6,6 +6,7 @@ import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.School;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
@@ -27,6 +28,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -138,6 +141,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> retrieveTeachers(int page, int size) {
         return userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
+    }
+    @Override
+   public User viewTeacherProfileByEmail(String email){
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String email = ((UserDetails)principal).getUsername();
+
+        return userRepository.findUserByEmailAndRole(email, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    }
+
+    @Override
+    public User viewTeacherProfileById(Long id) {
+        return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
     }
 
 }
