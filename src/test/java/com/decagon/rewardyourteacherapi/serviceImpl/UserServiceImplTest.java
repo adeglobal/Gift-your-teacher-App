@@ -46,7 +46,7 @@ class UserServiceImplTest {
 
     @Test
     void SignUpUser(){
-        userService =  new UserServiceImpl(authenticationManager, jwtService, userRepository, passwordEncoder);
+        userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder);
         Assertions.assertEquals(user2, userService.signUpUser(user2));
         Exception exception = assertThrows(RuntimeException.class, () -> {
             userService.signUpUser(user2);
@@ -61,7 +61,7 @@ class UserServiceImplTest {
         Pageable pageable = PageRequest.of(0, 5);
         List<User> list= new ArrayList<>();
         Page<User> page = new PageImpl<>(list, pageable, list.size());
-        userService =  new UserServiceImpl(authenticationManager, jwtService, userRepository, passwordEncoder);
+        userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder);
         Assertions.assertEquals(page, userService.getSchoolTeachers(1L, 0,5));
     }
 
