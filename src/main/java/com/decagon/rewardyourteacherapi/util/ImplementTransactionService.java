@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
 @Service
 @Transactional
 @AllArgsConstructor
-public class InitializeTransactionService {
+public class ImplementTransactionService {
     public InitializeTransactionResponse initTransaction(InitializeTransactionRequest request) throws Exception {
         InitializeTransactionResponse initializeTransactionResponse = null;
         try {
