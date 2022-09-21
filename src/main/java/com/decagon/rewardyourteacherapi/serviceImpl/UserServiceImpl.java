@@ -7,6 +7,7 @@ import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.School;
+import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.model.Wallet;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,7 +51,9 @@ public class UserServiceImpl implements UserService {
     public String login(LoginDTO loginDto){
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if(auth.isAuthenticated()){
-            return "Bearer "+JwtService.generateToken(new org.springframework.security.core.userdetails.User(loginDto.getEmail(),loginDto.getPassword(),new ArrayList<>()));
+            return "Bearer " + JwtService.generateToken
+            (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
+                    new ArrayList<>()));
         }else{
             throw new AuthorizationException("Not Authenticated ");
         }
@@ -128,6 +133,11 @@ public class UserServiceImpl implements UserService {
         Page<User> paged = userRepository.findAllBySchoolAndRole(school, Role.TEACHER, paging);
         List<UserDTO> userDTOList = paged.getContent().stream().map(PayloadToModel::MapUserToDTO).collect(Collectors.toList());
         return new PageImpl<>(userDTOList, paging, paged.getTotalElements());
+    }
+
+    @Override
+    public Page<User> retrieveTeachers(int page, int size) {
+        return userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
     }
 
 }
