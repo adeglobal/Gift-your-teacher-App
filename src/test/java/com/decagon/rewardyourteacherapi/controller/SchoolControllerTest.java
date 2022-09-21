@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
+import com.decagon.rewardyourteacherapi.service.SchoolService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ class SchoolControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    SchoolService schoolService;
 
     @Autowired
     SchoolController schoolController;
