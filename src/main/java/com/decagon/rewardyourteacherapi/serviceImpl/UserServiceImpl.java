@@ -7,7 +7,6 @@ import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
-import com.decagon.rewardyourteacherapi.payload.TeacherResponse;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
@@ -18,12 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -74,19 +71,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<TeacherResponse> retrieveTeachers(int page, int size) {
-        Page<User> teacher = userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
-        List<TeacherResponse> teacherResponses = new ArrayList<>();
-        for (User teachers : teacher){
-            TeacherResponse teacherResponse = new TeacherResponse();
-            teacherResponse.setFirstname(teachers.getFirstName());
-            teacherResponse.setLastname(teachers.getLastName());
-            teacherResponse.setEmail(teachers.getEmail());
-            teacherResponse.setImageUrl(teachers.getProfileImage());
-            teacherResponses.add(teacherResponse);
-        }
-        return teacherResponses;
-
+    public Page<User> retrieveTeachers(int page, int size) {
+        return userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
     }
 
 }
