@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
+import com.decagon.rewardyourteacherapi.exception.UserDoesNotExistException;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.util.Responder;
 import org.springframework.http.ResponseEntity;
@@ -19,5 +20,10 @@ public class RewardExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<APIResponse> UserAlreadyExists(UserAlreadyExistsException ex){
         return  Responder.alreadyExists(ex.getMessage());
+    }
+
+    @ExceptionHandler(UserDoesNotExistException.class)
+    public ResponseEntity<APIResponse> UserDoesNotExist(UserDoesNotExistException ex){
+        return  Responder.doesNotExists(ex.getMessage());
     }
 }

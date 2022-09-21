@@ -24,6 +24,10 @@ public class Responder {
         return  new ResponseEntity<>(new APIResponse(message, true, null), HttpStatus.CONFLICT);
     }
 
+    public static ResponseEntity<APIResponse> doesNotExists(String message){
+        return  new ResponseEntity<>(new APIResponse(message, true, null), HttpStatus.CONFLICT);
+    }
+
     public static ResponseEntity<APIResponse> unAuthorized(String message){
         return  new ResponseEntity<>(new APIResponse(message, true, null), HttpStatus.UNAUTHORIZED);
     }

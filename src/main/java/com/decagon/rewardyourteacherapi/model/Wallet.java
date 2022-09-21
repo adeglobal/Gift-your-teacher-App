@@ -21,6 +21,4 @@ public class Wallet {
     private User userId;
     private BigDecimal total;
 
-
-
 }
