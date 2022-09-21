@@ -5,6 +5,8 @@ import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public interface UserService {
 
@@ -14,9 +16,9 @@ public interface UserService {
 
     String authenticateOauth2User(UserRegistrationDTO request);
 
-//    User getProfileById( long id);
-
     User updateUserProfile(UserRegistrationDTO request, long id);
+
+    BigDecimal getCurrentWalletBalance(Long id);
 }
 
 

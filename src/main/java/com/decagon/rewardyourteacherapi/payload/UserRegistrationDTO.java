@@ -8,6 +8,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@NoArgsConstructor
 public class UserRegistrationDTO {
     private String firstname;
     private String lastname;
