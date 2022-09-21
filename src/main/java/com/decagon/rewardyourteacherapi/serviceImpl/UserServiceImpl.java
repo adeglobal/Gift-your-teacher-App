@@ -7,9 +7,11 @@ import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.School;
 import com.decagon.rewardyourteacherapi.model.User;
+import com.decagon.rewardyourteacherapi.model.Wallet;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
+import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +38,8 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+
+    private final WalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
 
     public String login(LoginDTO loginDto){
@@ -67,8 +73,23 @@ public class UserServiceImpl implements UserService {
             userRepository.save(newUser);
         }
         return "Bearer " + JwtService.generateToken
-                (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getFirstname(),
+                (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPassword(),
                         new ArrayList<>()));
+    }
+
+    @Override
+    public BigDecimal getCurrentWalletBalance(Long user_id) {
+        Optional<User> user = userRepository.findById(user_id);
+
+        if (user.isPresent()){
+            Optional<Wallet> wallet = walletRepository.findWalletById(user.get().getId());
+
+            if(wallet.isPresent()){
+
+                return wallet.get().getTotal();
+            }
+        }
+        return new BigDecimal(0.0);
     }
 
     @Override
