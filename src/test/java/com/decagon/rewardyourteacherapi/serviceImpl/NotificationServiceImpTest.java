@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.service;
+package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.RewardYourTeacherApiApplication;
 import com.decagon.rewardyourteacherapi.model.Message;
@@ -7,7 +7,6 @@ import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
-import com.decagon.rewardyourteacherapi.serviceImpl.NotificationServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ class NotificationServiceImpTest {
 
 
     @Test
-    void saveTransactionNotification() {
+    void saveTransactionNotification() throws NullPointerException {
         userRepository.save(user1);
         userRepository.save(user2);
         Transaction transaction1 = new Transaction(1L, user1, user2, new BigDecimal(12000.21));

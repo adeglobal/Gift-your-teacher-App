@@ -25,8 +25,6 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
-
-
     private final AuthUserService authUserService;
     private final JwtFilter jwtFilter;
     @Autowired
@@ -44,19 +42,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**",
                         "/index","/api/oauth2/student/callback","/api/oauth2/teacher/callback","/api/v1/viewSingleTeacherByEmail","/api/v1/viewSingleTeacherById")
+                        "/index","/api/oauth2/student/callback", "/app/**","/api/oauth2/teacher/callback", "/api/v1/student/**","/api/v1/teacher/**" )
                 .permitAll()
+                .antMatchers("/api/v1/user/wallet-balance/**").authenticated()
                 .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                . logout()
+                .logout()
                 .logoutUrl("/api/v1/logout")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/logout"))
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
-                    httpServletResponse.setStatus(200);
-                })
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.setStatus(200))
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         super.configure(http);
@@ -89,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8081", "google.com","facebook.com"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "google.com","facebook.com"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET","PUT","POST","UPDATE","DELETE"));
         corsConfiguration.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", corsConfiguration); // Global for all paths
@@ -98,5 +96,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
-
 }

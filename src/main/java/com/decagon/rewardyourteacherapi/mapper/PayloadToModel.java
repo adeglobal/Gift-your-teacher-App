@@ -1,10 +1,10 @@
 package com.decagon.rewardyourteacherapi.mapper;
 
 import com.decagon.rewardyourteacherapi.model.User;
-import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
+import com.decagon.rewardyourteacherapi.payload.UserDTO;
 
 public class PayloadToModel {
-    public static User MapRequestToUser(UserRegistrationDTO request){
+    public static User MapRequestToUser(UserDTO request){
        User user  = new User();
        if(request.getFirstname() != null){
            user.setFirstName(request.getFirstname());
@@ -25,5 +25,9 @@ public class PayloadToModel {
            user.setProfileImage(request.getImageUrl());
        }
        return user;
+    }
+
+    public static UserDTO MapUserToDTO(User user){
+       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getProfileImage());
     }
 }
