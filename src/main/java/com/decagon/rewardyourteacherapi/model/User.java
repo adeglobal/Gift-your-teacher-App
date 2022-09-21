@@ -1,11 +1,11 @@
 package com.decagon.rewardyourteacherapi.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+@Getter
+@Setter
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,4 +41,10 @@ public class User {
         this.password = password;
     }
 
+    public User(long id, String firstName, String lastName, String profileImage) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profileImage = profileImage;
+    }
 }
