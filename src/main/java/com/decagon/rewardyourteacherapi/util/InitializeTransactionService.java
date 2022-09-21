@@ -1,7 +1,9 @@
 package com.decagon.rewardyourteacherapi.util;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import lombok.AllArgsConstructor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -15,9 +17,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 @Service
 @Transactional
+@AllArgsConstructor
 public class InitializeTransactionService {
+    private final PayStackVerifyTransactionResponse payStackVerifyTransactionResponse;
 
-    public InitializeTransactionResponse initTransaction(InitializeTransactionRequest request) throws Exception {
+    public String initTransaction(InitializeTransactionRequest request) throws Exception {
         InitializeTransactionResponse initializeTransactionResponse = null;
         try {
             // convert transaction to json then use it as a body to post json
@@ -49,7 +53,14 @@ public class InitializeTransactionService {
             ex.printStackTrace();
             throw new Exception("Failure initializaing paystack transaction");
         }
+        String test = initializeTransactionResponse.getData().getReference();
+        PayStackVerifyTransactionResponse payStackVerifyTransactionResponse1 = payStackVerifyTransactionResponse
+                .verifyTransaction(initializeTransactionResponse.getData().getReference());
+        if(payStackVerifyTransactionResponse1 == null){
+            throw new Exception("Failure initializaing paystack transaction");
+        }
 
-        return initializeTransactionResponse;
+        return "Payment Successful";
     }
+
 }
