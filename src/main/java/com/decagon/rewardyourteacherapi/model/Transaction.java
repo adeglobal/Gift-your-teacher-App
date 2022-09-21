@@ -3,9 +3,11 @@ package com.decagon.rewardyourteacherapi.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +25,9 @@ public class Transaction {
     @JoinColumn(name = "recipient_id")
     private User recipient;
     private BigDecimal amount;
+    @CreationTimestamp
+    @Column(name = "transaction_date")
+    private LocalDateTime transactionDate;
 
     public Transaction(User sender, User recipient, BigDecimal amount) {
         this.sender = sender;

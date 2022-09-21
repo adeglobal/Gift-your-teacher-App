@@ -19,9 +19,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import lombok.ToString;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@ToString
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -41,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
     private final WalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public String login(LoginDTO loginDto){
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
@@ -75,6 +79,26 @@ public class UserServiceImpl implements UserService {
         return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPassword(),
                         new ArrayList<>()));
+    }
+    public User updateUserProfile (UsernDTO userRegistrationDTO, long id){
+        System.out.println(userRegistrationDTO + "" + id);
+        User newUserDetails =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+//        System.out.println(newUserDetails);
+        if(userRegistrationDTO.getFirstname()!=null){
+            newUserDetails.setFirstName(userRegistrationDTO.getFirstname());
+        }
+        if (userRegistrationDTO.getLastname()!=null){
+            newUserDetails.setLastName(userRegistrationDTO.getLastname());
+        }
+        if (userRegistrationDTO.getPassword()!=null){
+            newUserDetails.setPassword(userRegistrationDTO.getPassword());
+        }
+        if (userRegistrationDTO.getImageUrl()!= null) {
+            newUserDetails.setProfileImage(userRegistrationDTO.getImageUrl());
+        }
+
+      return userRepository.save(newUserDetails);
+
     }
 
     @Override
