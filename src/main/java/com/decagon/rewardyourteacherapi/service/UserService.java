@@ -19,7 +19,7 @@ public interface UserService {
 
     Page<UserDTO> getSchoolTeachers(Long id, int page, int size);
 
-    User updateUserProfile(UserRegistrationDTO request, long id);
+    User updateUserProfile(UserDTO request, long id);
 
     BigDecimal getCurrentWalletBalance(Long id);
 }

@@ -2,7 +2,7 @@ package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
-import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
+import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.util.Responder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,9 @@ public class StudentController {
     UserService userService;
 
     @PostMapping(value = "/edit/{id}")
-    public ResponseEntity<APIResponse> editStudentProfile(@PathVariable(name = "id") long id, @RequestBody UserRegistrationDTO request) {
+    public ResponseEntity<APIResponse> editStudentProfile(@PathVariable(name = "id") long id, @RequestBody UserDTO request) {
         request.setRole(Role.STUDENT);
-        long userId = (id);
-        return Responder.okay(userService.updateUserProfile(request, userId));
+        return Responder.okay(userService.updateUserProfile(request, id));
 
     }
 }
