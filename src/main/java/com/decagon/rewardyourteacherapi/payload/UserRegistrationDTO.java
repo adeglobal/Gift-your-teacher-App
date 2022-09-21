@@ -3,8 +3,7 @@ package com.decagon.rewardyourteacherapi.payload;
 import com.decagon.rewardyourteacherapi.model.Role;
 import lombok.*;
 
-@Getter
-@Setter
+
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
