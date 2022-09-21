@@ -2,9 +2,15 @@ package com.decagon.rewardyourteacherapi.mapper;
 
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.UserRegistrationDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@AllArgsConstructor
+@Getter
+@Setter
 public class PayloadToModel {
-    public static User MapRequestToUser(UserRegistrationDTO request){
+    public static User MapRequestToUser(UserRegistrationDTO request ){
        User user  = new User();
        if(request.getFirstname() != null){
            user.setFirstName(request.getFirstname());
@@ -12,7 +18,7 @@ public class PayloadToModel {
        if(request.getLastname() !=  null){
            user.setLastName(request.getLastname());
        }
-       if(request.getEmail() != null){
+       if(request.getEmail() != null ){
            user.setEmail(request.getEmail());
        }
        if(request.getPassword() != null){
