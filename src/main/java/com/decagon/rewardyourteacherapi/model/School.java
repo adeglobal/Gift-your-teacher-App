@@ -17,7 +17,8 @@ public class School{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String schoolName;
-    private String schoolType;
-    private String schoolAddress;
-    private String schoolCity;
-    private String schoolState;}
+
+    public School(long id) {
+        this.id = id;
+    }
+}

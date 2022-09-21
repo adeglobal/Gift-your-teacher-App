@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.controllers;
+package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.controller.UserLoginController;
 import com.decagon.rewardyourteacherapi.model.Role;
@@ -62,5 +62,6 @@ class UserControllerTest {
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
         actualPerformResult.andExpect(MockMvcResultMatchers.status().is(200));
     }
+
 }
 
