@@ -20,5 +20,4 @@ public class Wallet {
     @JoinColumn(name = "user_id")
     private User userId;
     private BigDecimal total;
-
 }
