@@ -28,7 +28,7 @@ public class NotificationServiceImp implements NotificationService {
             notificationRepository.save(notification);
         }
         else{
-                notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
+            notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
             notification.setUser(transaction.getRecipient());
             notificationRepository.save(notification);
             Notification notification2 = new Notification("You've successfully funded your teacher's wallet with N"

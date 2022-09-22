@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
+import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
@@ -8,14 +9,12 @@ import com.decagon.rewardyourteacherapi.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
-    private TransactionRepository transactionRepository;
-    private UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
 
 
     @Autowired
@@ -27,14 +26,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> transactionHistory(Long id) {
-        Optional<User> user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("user not found"));
         System.out.println(user);
-        if(user.isPresent()){
-
-            return transactionRepository.findTransactionBySenderId(user.get().getId());
-        }
-
-        return new ArrayList<>();
+        return transactionRepository.findTransactionsBySender(user);
     }
 
 }
