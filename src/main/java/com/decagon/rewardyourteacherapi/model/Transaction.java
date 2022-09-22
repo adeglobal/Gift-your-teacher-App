@@ -36,5 +36,9 @@ public class Transaction {
         this.amount = amount;
     }
 
-
+    public Transaction(User sender, User recipient, BigDecimal amount) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.amount = amount;
+    }
 }

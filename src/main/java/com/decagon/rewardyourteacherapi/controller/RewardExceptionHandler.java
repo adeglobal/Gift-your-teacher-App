@@ -27,8 +27,4 @@ public class RewardExceptionHandler {
         return  Responder.notFound (ex.getMessage());
     }
 
-    @ExceptionHandler(UserDoesNotExistException.class)
-    public ResponseEntity<APIResponse> UserDoesNotExist(UserDoesNotExistException ex){
-        return  Responder.doesNotExists(ex.getMessage());
-    }
 }
