@@ -7,6 +7,8 @@ import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +27,10 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public List<Transaction> transactionHistory(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("user not found"));
-        System.out.println(user);
+    public List<Transaction> transactionHistory() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UserNotFoundException(String.format("user with email: %s not found", email )));
         return transactionRepository.findTransactionsBySender(user);
     }
 

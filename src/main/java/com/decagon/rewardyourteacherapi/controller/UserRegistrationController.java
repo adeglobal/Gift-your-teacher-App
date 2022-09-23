@@ -51,8 +51,5 @@ public class UserRegistrationController {
         return Responder.okay(userService.authenticateOauth2User(request));
     }
 
-    @GetMapping("/retrieveTeachers")
-    public ResponseEntity<APIResponse> retrieveTeacher(@RequestParam("page") int page, @RequestParam("size") int size){
-        return Responder.okay(userService.retrieveTeachers(page, size));
-    }
+
 }

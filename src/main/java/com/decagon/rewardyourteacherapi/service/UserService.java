@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.service;
 
+import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public interface UserService {
@@ -21,15 +23,13 @@ public interface UserService {
 
     User updateUserProfile(UserDTO request, long id);
 
-    BigDecimal getCurrentWalletBalance(Long id);
+    BigDecimal getCurrentWalletBalance();
 
     Page<User> retrieveTeachers(int page, int size);
 
-    User viewTeacherProfileByEmail(String email);
+    User viewTeacherProfile(Long id);
 
-    User viewTeacherProfileById(Long id);
-
-
+    List<UserDTO> searchTeacher(String name);
 
 }
 

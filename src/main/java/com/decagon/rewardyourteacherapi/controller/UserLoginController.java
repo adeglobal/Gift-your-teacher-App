@@ -21,16 +21,4 @@ public class UserLoginController {
         return  Responder.okay(userService.login(loginDto));
     }
 
-
-    //@RequestMapping(value = "/viewSingleTeacher", method = RequestMethod.GET)
-    @GetMapping(value = "/api/v1/viewSingleTeacherByEmail")
-    public ResponseEntity<APIResponse> viewTeacherByEmail(@RequestParam String email) {
-        return Responder.okay(userService.viewTeacherProfileByEmail(email));
-    }
-
-    @GetMapping(value = "/api/v1/viewSingleTeacherById")
-    public ResponseEntity<APIResponse> viewTeacherById(@RequestParam Long id){
-        return Responder.okay((userService.viewTeacherProfileById(id)));
-    }
-
 }

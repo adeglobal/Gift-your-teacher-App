@@ -4,7 +4,7 @@ import com.decagon.rewardyourteacherapi.exception.UserDoesNotExistException;
 import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.model.Wallet;
-import com.decagon.rewardyourteacherapi.payload.FundWalletRequestDTO;
+import com.decagon.rewardyourteacherapi.payload.FundingRequestDTO;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.repository.WalletRepository;
@@ -25,7 +25,7 @@ public class WalletServiceImpl implements WalletService {
 
 
     @Override
-    public Wallet fundStudentWallet(FundWalletRequestDTO fundingRequest)  {
+    public Wallet fundStudentWallet(FundingRequestDTO fundingRequest)  {
         User user = userRepository.findByEmail(fundingRequest.getEmail()).orElseThrow(()->
                 new UserDoesNotExistException(String.format("User with email, %s not found", fundingRequest.getEmail())));
         Wallet wallet = walletRepository.findWalletByUserId(user).orElse(null);

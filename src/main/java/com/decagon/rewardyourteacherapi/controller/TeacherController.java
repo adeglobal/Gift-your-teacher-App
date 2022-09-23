@@ -15,9 +15,22 @@ public class TeacherController {
     @Autowired
     UserService userService;
 
-    @PostMapping(value = "/edit/{id}")
+    @PostMapping(value = "/{id}")
     public ResponseEntity<APIResponse> editProfile(@PathVariable(name = "id") long id, @RequestBody UserDTO request) {
-        request.setRole(Role.TEACHER);
         return Responder.okay(userService.updateUserProfile(request, id));
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<APIResponse> viewTeacherById(@RequestParam Long id){
+        return Responder.okay((userService.viewTeacherProfile(id)));
+    }
+    @GetMapping(value = "/search={name}")
+    public ResponseEntity <APIResponse> searchTeacher(@PathVariable(value = "name")String name){
+        return Responder.okay(userService.searchTeacher(name));
+    }
+    @GetMapping("/retrieveTeachers")
+    public ResponseEntity<APIResponse> retrieveTeacher(@RequestParam("page") int page, @RequestParam("size") int size){
+        return Responder.okay(userService.retrieveTeachers(page, size));
+    }
+
 }

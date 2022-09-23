@@ -73,7 +73,9 @@ public class UserServiceImpl implements UserService {
         String encodedPassword = passwordEncoder
                 .encode(user.getPassword());
         user.setPassword(encodedPassword);
-        userRepository.save(user);
+        User dbUser = userRepository.save(user);
+        Wallet wallet = new Wallet(dbUser, new BigDecimal(0));
+        walletRepository.save(wallet);
         return user;
     }
 
@@ -88,34 +90,37 @@ public class UserServiceImpl implements UserService {
                         new ArrayList<>()));
     }
     public User updateUserProfile (UserDTO userRegistrationDTO, long id){
-        System.out.println(userRegistrationDTO + "" + id);
-        User newUserDetails =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-        if(userRegistrationDTO.getFirstname()!=null){
-            newUserDetails.setFirstName(userRegistrationDTO.getFirstname());
+        User dBUser =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+        if(dBUser.getEmail().equals(email)) {
+            if (userRegistrationDTO.getFirstname() != null) {
+                dBUser.setFirstName(userRegistrationDTO.getFirstname());
+            }
+            if (userRegistrationDTO.getLastname() != null) {
+                dBUser.setLastName(userRegistrationDTO.getLastname());
+            }
+            if (userRegistrationDTO.getPassword() != null) {
+                dBUser.setPassword(userRegistrationDTO.getPassword());
+            }
+            if (userRegistrationDTO.getImageUrl() != null) {
+                dBUser.setProfileImage(userRegistrationDTO.getImageUrl());
+            }
+            return userRepository.save(dBUser);
         }
-        if (userRegistrationDTO.getLastname()!=null){
-            newUserDetails.setLastName(userRegistrationDTO.getLastname());
+        else{
+            throw new AuthorizationException("this is not your profile") ;
         }
-        if (userRegistrationDTO.getPassword()!=null){
-            newUserDetails.setPassword(userRegistrationDTO.getPassword());
-        }
-        if (userRegistrationDTO.getImageUrl()!= null) {
-            newUserDetails.setProfileImage(userRegistrationDTO.getImageUrl());
-        }
-      return userRepository.save(newUserDetails);
-
     }
 
     @Override
-    public BigDecimal getCurrentWalletBalance(Long user_id) {
-        Optional<User> user = userRepository.findById(user_id);
-        if (user.isPresent()){
-            Optional<Wallet> wallet = walletRepository.findWalletById(user.get().getId());
-
-            if(wallet.isPresent()){
-
-                return wallet.get().getTotal();
-            }
+    public BigDecimal getCurrentWalletBalance() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        Optional<Wallet> wallet = walletRepository.findWalletById(user.getId());
+        if(wallet.isPresent()){
+            return wallet.get().getTotal();
         }
         return new BigDecimal(0.0);
     }
@@ -139,17 +144,15 @@ public class UserServiceImpl implements UserService {
     public Page<User> retrieveTeachers(int page, int size) {
         return userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
     }
-    @Override
-   public User viewTeacherProfileByEmail(String email){
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String email = ((UserDetails)principal).getUsername();
 
-        return userRepository.findUserByEmailAndRole(email, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    @Override
+    public User viewTeacherProfile(Long id) {
+        return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
     }
 
-    @Override
-    public User viewTeacherProfileById(Long id) {
-        return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    public List<UserDTO> searchTeacher(String name){
+        List<User> list = userRepository.findUsersByRoleAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(Role.TEACHER,name, name);
+        return  list.stream().map(PayloadToModel::MapUserToDTO).collect(Collectors.toList());
     }
 
 }
