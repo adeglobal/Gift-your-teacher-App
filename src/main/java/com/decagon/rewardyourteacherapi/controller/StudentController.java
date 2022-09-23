@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
     @Autowired
     UserService userService;
+    @Autowired
+    private WalletService walletService;
 
     @PostMapping(value = "/edit/{id}")
     public ResponseEntity<APIResponse> editStudentProfile(@PathVariable(name = "id") long id, @RequestBody UserDTO request) {
@@ -32,12 +34,10 @@ public class StudentController {
         return Responder.okay(userService.updateUserProfile(request, id));
 
     }
-        @Autowired
-        private WalletService walletService;
 
-        @PostMapping("/wallet/fund")
-        public ResponseEntity<APIResponse> fundWallet(@RequestBody FundWalletRequestDTO fundWalletRequestDto) throws Exception {
-            return Responder.okay(walletService.fundStudentWallet(fundWalletRequestDto));
-        }
+    @PostMapping("/wallet/fund")
+    public ResponseEntity<APIResponse> fundWallet(@RequestBody FundWalletRequestDTO fundWalletRequestDto) {
+        return Responder.okay(walletService.fundStudentWallet(fundWalletRequestDto));
+    }
 
 }

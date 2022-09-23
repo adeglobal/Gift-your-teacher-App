@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -15,10 +16,7 @@ import javax.validation.constraints.Digits;
 @NoArgsConstructor
 public class InitializeTransactionRequest {
 
-        @Digits(integer = 9, fraction = 0)
-        private String amount;
-
-
+        private BigDecimal amount;
         private String email;
 
-    }
+}

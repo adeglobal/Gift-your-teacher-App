@@ -90,7 +90,6 @@ public class UserServiceImpl implements UserService {
     public User updateUserProfile (UserDTO userRegistrationDTO, long id){
         System.out.println(userRegistrationDTO + "" + id);
         User newUserDetails =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-//        System.out.println(newUserDetails);
         if(userRegistrationDTO.getFirstname()!=null){
             newUserDetails.setFirstName(userRegistrationDTO.getFirstname());
         }
@@ -103,7 +102,6 @@ public class UserServiceImpl implements UserService {
         if (userRegistrationDTO.getImageUrl()!= null) {
             newUserDetails.setProfileImage(userRegistrationDTO.getImageUrl());
         }
-
       return userRepository.save(newUserDetails);
 
     }
@@ -111,7 +109,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public BigDecimal getCurrentWalletBalance(Long user_id) {
         Optional<User> user = userRepository.findById(user_id);
-
         if (user.isPresent()){
             Optional<Wallet> wallet = walletRepository.findWalletById(user.get().getId());
 
