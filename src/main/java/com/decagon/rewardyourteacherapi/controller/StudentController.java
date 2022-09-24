@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/student")
 public class StudentController {
-    @Autowired
+
     UserService userService;
-    @Autowired
+
     private WalletService walletService;
-    @Autowired
+
     private PaystackTransactionService transaction;
 
     @PostMapping(value = "/{id}")

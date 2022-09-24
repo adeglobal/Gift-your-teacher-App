@@ -7,6 +7,7 @@ import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 
@@ -16,11 +17,11 @@ public class NotificationServiceImp implements NotificationService {
 
     final NotificationRepository notificationRepository;
 
-    final JavaMailSender javaMailSender;
+    final JavaMailSender javaMailSender = new JavaMailSenderImpl();
     @Autowired
-    public NotificationServiceImp(NotificationRepository notificationRepository, JavaMailSender javaMailSender) {
+    public NotificationServiceImp(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
-        this.javaMailSender = javaMailSender;
+
     }
         @Override
     public void  saveTransactionNotification(Transaction transaction){

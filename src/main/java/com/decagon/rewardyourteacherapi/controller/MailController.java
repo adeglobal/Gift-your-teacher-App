@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/mail")
 public class MailController {
 
-    @Autowired
+
     NotificationService notificationService;
 
     @PostMapping("/send")
