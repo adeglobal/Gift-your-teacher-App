@@ -24,6 +24,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
+import static com.decagon.rewardyourteacherapi.model.Role.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -47,9 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                         "/api/v1/viewSingleTeacherByEmail","/api/v1/viewSingleTeacherById", "/swagger-ui/**")
                 .permitAll()
                 .antMatchers("/api/v1/user/wallet-balance/**", "api/v1/teacher/**", "api/v1/student/**", "api/v1/user/transaction-history","api/v1/user/wallet-balance").authenticated()
-                .antMatchers("/api/v1/student/test", "api/v1/school/{id}/{page}&{size}", "/api/v1/student/test?={reference}","api/v1/student/wallet-fund" ).hasRole(Role.STUDENT.name())
-                .antMatchers(HttpMethod.POST, "api/v1/student/{id}").hasRole(Role.STUDENT.name())
-                .antMatchers(HttpMethod.POST, "api/v1/teacher/{id}").hasRole(Role.TEACHER.name())
+                .antMatchers("/api/v1/student/test", "api/v1/school/{id}/{page}&{size}", "/api/v1/student/test?={reference}","api/v1/student/wallet-fund" ).hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.POST, "api/v1/student/{id}").hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.POST, "api/v1/teacher/{id}").hasRole(TEACHER.name())
                 .antMatchers("/api/**").authenticated().and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
