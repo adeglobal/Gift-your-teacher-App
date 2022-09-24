@@ -32,7 +32,9 @@ public class WalletServiceImpl implements WalletService {
         BigDecimal balance = wallet.getTotal();
         balance = balance.add(fundingRequest.getAmount());
         wallet.setTotal(balance);
-        notificationService.saveTransactionNotification(transactionRepository.save(new Transaction(user, user, balance)));
+        Transaction ts = new Transaction(user, user, fundingRequest.getAmount());
+        ts =transactionRepository.save(ts);
+        notificationService.saveTransactionNotification(ts);
         return walletRepository.save(wallet);
     }
 }

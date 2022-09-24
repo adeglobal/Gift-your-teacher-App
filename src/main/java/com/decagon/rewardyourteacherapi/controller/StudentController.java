@@ -41,7 +41,7 @@ public class StudentController {
         return ResponseEntity.ok(transaction.initTransaction(request));
     }
 
-    @PostMapping("/test?={reference}")
+    @PostMapping("/test/{reference}")
     public ResponseEntity<?> pay(@PathVariable("reference") String request) throws Exception{
         return ResponseEntity.ok(transaction.verifyTransaction(request));
     }

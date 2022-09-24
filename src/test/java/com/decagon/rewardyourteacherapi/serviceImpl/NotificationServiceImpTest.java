@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -32,14 +34,15 @@ class NotificationServiceImpTest {
     @Autowired
     UserRepository userRepository;
 
-
+    @MockBean
+    JavaMailSender javaMailSender;
     @Test
     void saveTransactionNotification() throws NullPointerException {
         userRepository.save(user1);
         userRepository.save(user2);
         Transaction transaction1 = new Transaction(1L, user1, user2, new BigDecimal(12000.21));
         Transaction transaction2 = new Transaction(2L, user1, user1, new BigDecimal(5000));
-        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository);
+        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository, javaMailSender);
         notService.saveTransactionNotification(transaction1);
         assertNotNull(notificationRepository.findByMessageAndUser(teacherFunded, user2));
         Notification  not = notificationRepository.findByMessageAndUser(teacherFunded, user2).orElse(null);
@@ -58,7 +61,7 @@ class NotificationServiceImpTest {
         userRepository.save(user1);
         userRepository.save(user2);
         Message message = new Message(user1, user2, "Hello governor");
-        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository);
+        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository, javaMailSender);
         notService.saveMessageNotification(message);
         assertNotNull(notificationRepository.findByMessageAndUser("Hello governor", user2));
     }

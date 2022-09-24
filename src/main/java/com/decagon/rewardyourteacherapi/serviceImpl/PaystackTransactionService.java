@@ -55,6 +55,7 @@ public class PaystackTransactionService {
             } else {
                 throw new AuthenticationException("Error Occurred while initializing transaction");
             }
+            System.out.println(result.toString());
             ObjectMapper mapper = new ObjectMapper();
             initializeTransactionResponse = mapper.readValue(result.toString(), InitializeTransactionResponse.class);
         } catch (Exception ex) {
@@ -99,6 +100,7 @@ public class PaystackTransactionService {
                 payStackResponse = mapper.readValue(result.toString(), VerifyTransactionResponse.class);
 
                 if (payStackResponse.getData().getGateway_response().equals("Successful"))
+                    //call fund wallet
                     return payStackResponse;
 
             } catch (JsonProcessingException e) {

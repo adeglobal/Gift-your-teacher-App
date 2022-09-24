@@ -5,6 +5,8 @@ import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 
@@ -13,9 +15,12 @@ public class NotificationServiceImp implements NotificationService {
 
 
     final NotificationRepository notificationRepository;
+
+    final JavaMailSender javaMailSender;
     @Autowired
-    public NotificationServiceImp(NotificationRepository notificationRepository) {
+    public NotificationServiceImp(NotificationRepository notificationRepository, JavaMailSender javaMailSender) {
         this.notificationRepository = notificationRepository;
+        this.javaMailSender = javaMailSender;
     }
         @Override
     public void  saveTransactionNotification(Transaction transaction){
@@ -26,6 +31,7 @@ public class NotificationServiceImp implements NotificationService {
             notification.setUser(transaction.getSender());
             notification.setMessage(message);
             notificationRepository.save(notification);
+            SendEmail(transaction.getRecipient(), message, "Funded your wallet");
         }
         else{
             notification.setMessage("A former student has successfully funded your wallet. Say Hi...");
@@ -35,7 +41,8 @@ public class NotificationServiceImp implements NotificationService {
                     + transaction.getAmount(),
                     transaction.getSender());
             notificationRepository.save(notification2);
-        }
+            SendEmail(transaction.getRecipient(), message, "You've been rewarded");
+            }
 
     }
 
@@ -43,10 +50,22 @@ public class NotificationServiceImp implements NotificationService {
     public void saveMessageNotification(Message message) {
         Notification notification = new Notification(message.getContent(), message.getReceiver());
         notificationRepository.save(notification);
+        SendEmail(message.getReceiver(), message.getContent(), "You've got mail from"+message.getSender().getFirstName());
     }
 
     public Notification findNotification(String message, User user){
         return notificationRepository.findByMessageAndUser(message, user).orElse(null);
+    }
+
+    public SimpleMailMessage SendEmail(User recipient, String message, String subject) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("olamiretj@gmail.com");
+        mailMessage.setTo(recipient.getEmail());
+        mailMessage.setSubject(subject);
+        mailMessage.setText(message);
+
+        javaMailSender.send(mailMessage);
+        return  mailMessage;
     }
 
 

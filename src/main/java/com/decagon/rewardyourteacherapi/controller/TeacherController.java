@@ -21,10 +21,10 @@ public class TeacherController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> viewTeacherById(@RequestParam Long id){
+    public ResponseEntity<APIResponse> viewTeacherById(@PathVariable("id") Long id){
         return Responder.okay((userService.viewTeacherProfile(id)));
     }
-    @GetMapping(value = "/search={name}")
+    @GetMapping(value = "/search/{name}")
     public ResponseEntity <APIResponse> searchTeacher(@PathVariable(value = "name")String name){
         return Responder.okay(userService.searchTeacher(name));
     }

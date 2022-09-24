@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User signUpUser(User user) {
+    public UserDTO signUpUser(User user) {
         boolean userExists = userRepository
                 .findByEmail(user.getEmail())
                 .isPresent();
@@ -76,20 +76,21 @@ public class UserServiceImpl implements UserService {
         User dbUser = userRepository.save(user);
         Wallet wallet = new Wallet(dbUser, new BigDecimal(0));
         walletRepository.save(wallet);
-        return user;
+        return PayloadToModel.MapUserToDTO(dbUser);
     }
 
     public String authenticateOauth2User(UserDTO request) {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
         if(existingUser.isEmpty()){
             User newUser = PayloadToModel.MapRequestToUser(request);
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
             userRepository.save(newUser);
         }
         return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPassword(),
                         new ArrayList<>()));
     }
-    public User updateUserProfile (UserDTO userRegistrationDTO, long id){
+    public UserDTO updateUserProfile (UserDTO userRegistrationDTO, long id){
         User dBUser =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails)principal).getUsername();
@@ -106,7 +107,7 @@ public class UserServiceImpl implements UserService {
             if (userRegistrationDTO.getImageUrl() != null) {
                 dBUser.setProfileImage(userRegistrationDTO.getImageUrl());
             }
-            return userRepository.save(dBUser);
+            return PayloadToModel.MapUserToDTO(userRepository.save(dBUser));
         }
         else{
             throw new AuthorizationException("this is not your profile") ;
@@ -141,13 +142,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> retrieveTeachers(int page, int size) {
-        return userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
+    public Page<UserDTO> retrieveTeachers(int page, int size) {
+        Page<User> userPage= userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
+        List<UserDTO> userDTOList = userPage.stream().map(PayloadToModel::MapUserToDTO).collect(Collectors.toList());
+        return new PageImpl<>(userDTOList, PageRequest.of(page, size), userPage.getTotalElements());
     }
 
     @Override
-    public User viewTeacherProfile(Long id) {
-        return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    public UserDTO viewTeacherProfile(Long id) {
+        return PayloadToModel.MapUserToDTO(userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found")));
     }
 
     public List<UserDTO> searchTeacher(String name){

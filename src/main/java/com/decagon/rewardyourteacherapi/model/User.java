@@ -50,4 +50,8 @@ public class User {
         this.lastName = lastName;
         this.profileImage = profileImage;
     }
+
+    public User(String email) {
+        this.email = email;
+    }
 }

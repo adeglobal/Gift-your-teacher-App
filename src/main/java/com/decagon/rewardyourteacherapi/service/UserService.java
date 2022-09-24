@@ -15,19 +15,19 @@ public interface UserService {
 
     String login(LoginDTO loginDto);
 
-    User signUpUser(User user);
+    UserDTO signUpUser(User user);
 
     String authenticateOauth2User(UserDTO request);
 
     Page<UserDTO> getSchoolTeachers(Long id, int page, int size);
 
-    User updateUserProfile(UserDTO request, long id);
+    UserDTO updateUserProfile(UserDTO request, long id);
 
     BigDecimal getCurrentWalletBalance();
 
-    Page<User> retrieveTeachers(int page, int size);
+    Page<UserDTO> retrieveTeachers(int page, int size);
 
-    User viewTeacherProfile(Long id);
+    UserDTO viewTeacherProfile(Long id);
 
     List<UserDTO> searchTeacher(String name);
 
