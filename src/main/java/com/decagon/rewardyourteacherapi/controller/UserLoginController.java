@@ -18,9 +18,6 @@ public class UserLoginController {
 
     private final UserService userService;
 
-    @PostMapping("/api/v1/login")
-    public ResponseEntity<APIResponse> login(@RequestBody LoginDTO loginDto){
-        return  Responder.okay(userService.login(loginDto));
-    }
+
 
 }

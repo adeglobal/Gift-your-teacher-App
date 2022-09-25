@@ -6,25 +6,20 @@ import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Role;
-import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.School;
-import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
-import com.decagon.rewardyourteacherapi.model.Wallet;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
-import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
+import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import lombok.ToString;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,8 +41,6 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-
-    private final WalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -70,13 +63,9 @@ public class UserServiceImpl implements UserService {
         if (userExists) {
             throw new UserAlreadyExistsException(String.format("Email %s has been taken", user.getEmail()));
         }
-        String encodedPassword = passwordEncoder
-                .encode(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        User dbUser = userRepository.save(user);
-        Wallet wallet = new Wallet(dbUser, new BigDecimal(0));
-        walletRepository.save(wallet);
-        return PayloadToModel.MapUserToDTO(dbUser);
+        return PayloadToModel.MapUserToDTO(userRepository.save(user));
     }
 
     public String authenticateOauth2User(UserDTO request) {
@@ -90,40 +79,27 @@ public class UserServiceImpl implements UserService {
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPassword(),
                         new ArrayList<>()));
     }
-    public UserDTO updateUserProfile (UserDTO userRegistrationDTO, long id){
-        User dBUser =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = ((UserDetails)principal).getUsername();
-        if(dBUser.getEmail().equals(email)) {
-            if (userRegistrationDTO.getFirstname() != null) {
-                dBUser.setFirstName(userRegistrationDTO.getFirstname());
-            }
-            if (userRegistrationDTO.getLastname() != null) {
-                dBUser.setLastName(userRegistrationDTO.getLastname());
-            }
-            if (userRegistrationDTO.getPassword() != null) {
-                dBUser.setPassword(userRegistrationDTO.getPassword());
-            }
-            if (userRegistrationDTO.getImageUrl() != null) {
-                dBUser.setProfileImage(userRegistrationDTO.getImageUrl());
-            }
-            return PayloadToModel.MapUserToDTO(userRepository.save(dBUser));
+    public UserDTO updateUserProfile (UserDTO userRegistrationDTO){
+        User dBUser =userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        if (userRegistrationDTO.getFirstname() != null) {
+            dBUser.setFirstName(userRegistrationDTO.getFirstname());
         }
-        else{
-            throw new AuthorizationException("this is not your profile") ;
+        if (userRegistrationDTO.getLastname() != null) {
+            dBUser.setLastName(userRegistrationDTO.getLastname());
         }
+        if (userRegistrationDTO.getPassword() != null) {
+            dBUser.setPassword(userRegistrationDTO.getPassword());
+        }
+        if (userRegistrationDTO.getImageUrl() != null) {
+            dBUser.setProfileImage(userRegistrationDTO.getImageUrl());
+        }
+        return PayloadToModel.MapUserToDTO(userRepository.save(dBUser));
     }
 
     @Override
     public BigDecimal getCurrentWalletBalance() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = ((UserDetails)principal).getUsername();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-        Optional<Wallet> wallet = walletRepository.findWalletById(user.getId());
-        if(wallet.isPresent()){
-            return wallet.get().getTotal();
-        }
-        return new BigDecimal(0.0);
+        User user = userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        return user.getWallet();
     }
 
     @Override

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 
 @RestController
 @RequestMapping("/api/v1/student")
@@ -26,14 +28,14 @@ public class StudentController {
 
     private PaystackTransactionService transaction;
 
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> editStudentProfile(@PathVariable(name = "id") long id, @RequestBody UserDTO request) {
-        return Responder.okay(userService.updateUserProfile(request, id));
+    @PostMapping(value = "")
+    public ResponseEntity<APIResponse> editStudentProfile(@RequestBody UserDTO request) {
+        return Responder.okay(userService.updateUserProfile(request));
     }
 
-    @PostMapping("/wallet/fund")
-    public ResponseEntity<APIResponse> fundWallet(@RequestBody FundingRequestDTO fundWalletRequestDto) {
-        return Responder.okay(walletService.fundStudentWallet(fundWalletRequestDto));
+    @PostMapping("/wallet-fund")
+    public ResponseEntity<APIResponse> fundWallet(@RequestParam ("amount")BigDecimal amount) {
+        return Responder.okay(walletService.fundStudentWallet(amount));
     }
 
     @PostMapping("/test")

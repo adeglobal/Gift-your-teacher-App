@@ -21,7 +21,7 @@ public interface UserService {
 
     Page<UserDTO> getSchoolTeachers(Long id, int page, int size);
 
-    UserDTO updateUserProfile(UserDTO request, long id);
+    UserDTO updateUserProfile(UserDTO request);
 
     BigDecimal getCurrentWalletBalance();
 
