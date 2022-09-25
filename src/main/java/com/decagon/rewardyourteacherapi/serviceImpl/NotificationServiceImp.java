@@ -5,7 +5,14 @@ import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 
 @Service
@@ -50,6 +57,12 @@ public class NotificationServiceImp implements NotificationService {
     }
 
 
+
+    public List<Notification> retrieveUserNotification(Long id){
+      User user = new User(id);
+      return  notificationRepository.findNotificationsByUser(user);
+
+    }
 
 
 }
