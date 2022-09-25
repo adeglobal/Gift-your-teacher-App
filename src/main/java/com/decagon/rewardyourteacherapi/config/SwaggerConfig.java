@@ -1,49 +1,57 @@
 package com.decagon.rewardyourteacherapi.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.*;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Configuration
-@ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true", matchIfMissing = true)
-public class SwaggerConfig {
-    @Value("${api.info.title: Reward Your Teacher App}")
-    private String title;
-    @Value("${api.info.description: api.info.description}")
-    private String description;
-    @Value("${api.info.version: v1}")
-    private String version;
-    @Value("${api.info.term-of-service: Terms}")
-    private String termsOfService;
-    @Value("${api.info.contact.name: Decagon SQ11B POD G}")
-    private String contactName;
-    @Value("${api.info.contact.email: PODG@decagon.dev}")
-    private String contactEmail;
-    @Value("${api.info.contact.url: https://rewardyourteacher.com/about/}")
-    private String contactUrl;
-    @Value("${api.info.licence.name: api.info.licence.name}")
-    private String licenceName;
-    @Value("${api.info.licence.url: api.info.licence.url}")
-    private String licenceUrl;
-    @Bean
-    public OpenAPI productApi() {
-        return new OpenAPI()
-                .info(getApiInfo());
+@EnableSwagger2
+public class SwaggerConfig implements WebMvcConfigurer {
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    private ApiInfo apiInfo() {
+        return new ApiInfo("REWARD YOUR TEACHER",
+                "An app that help students reward their teacher",
+                "1.0",
+                "Terms of service",
+                new Contact("Decagon POD G", "WEBSITE", "email"),
+                "API License",
+                "https://rewardyourteacher.com/about/licence",
+                Collections.emptyList());
     }
-    private Info getApiInfo() {
-        Contact contact = new Contact().name(contactName).email(contactEmail).url(contactUrl);
-        License licence = new License().name(licenceName).url(licenceUrl);
-        return new Info()
-                .title(title)
-                .description(description)
-                .version(version)
-                .contact(contact)
-                .license(licence)
-                .termsOfService("https://developer.rewardyoutteacher.com/en/developer-terms");
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .securityContexts(Arrays.asList(securityContext()))
+                .securitySchemes(Arrays.asList(apiKey()))
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.decagon.rewardyourteacherapi.controller"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+    private ApiKey apiKey() {
+        return new ApiKey("JWT",AUTHORIZATION_HEADER, "header");
+    }
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .build();
+    }
+    private List<SecurityReference> defaultAuth(){
+        AuthorizationScope authorizationScope = new AuthorizationScope("global","accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
     }
 }
