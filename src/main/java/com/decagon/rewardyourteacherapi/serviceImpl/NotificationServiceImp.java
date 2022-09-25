@@ -14,14 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationServiceImp implements NotificationService {
 
-
     final NotificationRepository notificationRepository;
 
-    final JavaMailSender javaMailSender = new JavaMailSenderImpl();
+    JavaMailSender javaMailSender = new JavaMailSenderImpl();
     @Autowired
     public NotificationServiceImp(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
-
     }
         @Override
     public void  saveTransactionNotification(Transaction transaction){
@@ -64,7 +62,6 @@ public class NotificationServiceImp implements NotificationService {
         mailMessage.setTo(recipient.getEmail());
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
-
         javaMailSender.send(mailMessage);
         return  mailMessage;
     }
