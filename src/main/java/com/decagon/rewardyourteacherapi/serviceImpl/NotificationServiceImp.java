@@ -35,7 +35,7 @@ public class NotificationServiceImp implements NotificationService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    JavaMailSender javaMailSender;
+    JavaMailSender javaMailSender = new JavaMailSenderImpl();
 
     @Autowired
     public NotificationServiceImp(NotificationRepository notificationRepository, JavaMailSender javaMailSender) {

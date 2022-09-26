@@ -5,6 +5,7 @@ import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.MailDTO;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
 import com.decagon.rewardyourteacherapi.util.Responder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/mail")
 public class MailController {
 
