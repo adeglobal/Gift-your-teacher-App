@@ -1,6 +1,5 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -15,9 +14,22 @@ public class TeacherController {
     @Autowired
     UserService userService;
 
-    @PostMapping(value = "/edit/{id}")
-    public ResponseEntity<APIResponse> editProfile(@PathVariable(name = "id") long id, @RequestBody UserDTO request) {
-        request.setRole(Role.TEACHER);
-        return Responder.okay(userService.updateUserProfile(request, id));
+    @PostMapping(value = "/update")
+    public ResponseEntity<APIResponse> editProfile(@RequestBody UserDTO request) {
+        return Responder.okay(userService.updateUserProfile(request));
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<APIResponse> viewTeacherById(@PathVariable("id") Long id){
+        return Responder.okay((userService.viewTeacherProfile(id)));
+    }
+    @GetMapping(value = "/search/{name}")
+    public ResponseEntity <APIResponse> searchTeacher(@PathVariable(value = "name")String name){
+        return Responder.okay(userService.searchTeacher(name));
+    }
+    @GetMapping("/retrieveTeachers")
+    public ResponseEntity<APIResponse> retrieveTeacher(@RequestParam("page") int page, @RequestParam("size") int size){
+        return Responder.okay(userService.retrieveTeachers(page, size));
+    }
+
 }

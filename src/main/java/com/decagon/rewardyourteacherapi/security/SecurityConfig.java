@@ -5,6 +5,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,6 +22,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
+
+import static com.decagon.rewardyourteacherapi.enums.Role.*;
 
 @Configuration
 @EnableWebSecurity
@@ -40,12 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/login/**","/api/v1/register/**",
-                        "/index","/api/oauth2/student/callback", "/app/**","/api/oauth2/teacher/callback", "/api/v1/student/**","/api/v1/teacher/**",
-                        "/api/v1/viewSingleTeacherByEmail","/api/v1/viewSingleTeacherById", "/test", "/swagger-ui/**" )
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/user/**",
+                        "/index", "/api/v1/school/retrieveSchools", "/api/v1/mail/**", "/api/v1/loggedOut", "/swagger-ui/**")
                 .permitAll()
-                .antMatchers("/api/v1/user/wallet-balance/**").authenticated()
-                .antMatchers("/api/**").authenticated().and()
+                .antMatchers("/api/v1/student/test", "api/v1/school/{id}/{page}&{size}", "/api/v1/student/test?={reference}","api/v1/student/wallet-fund" ).hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.POST, "api/v1/student/update").hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.POST, "api/v1/teacher/update").hasRole(TEACHER.name())
+                .and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .logout()

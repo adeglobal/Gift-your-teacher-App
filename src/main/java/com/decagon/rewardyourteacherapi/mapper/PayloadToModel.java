@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 
 public class PayloadToModel {
+
     public static User MapRequestToUser(UserDTO request){
        User user  = new User();
        if(request.getFirstname() != null){
@@ -28,6 +29,6 @@ public class PayloadToModel {
     }
 
     public static UserDTO MapUserToDTO(User user){
-       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getProfileImage());
+       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getWallet() ,user.getProfileImage());
     }
 }

@@ -1,9 +1,12 @@
 package com.decagon.rewardyourteacherapi.model;
 
 
+import com.decagon.rewardyourteacherapi.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Data
@@ -20,6 +23,7 @@ public class User {
     private String email;
     private String password;
     private String profileImage;
+    private BigDecimal wallet;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne
@@ -49,5 +53,9 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.profileImage = profileImage;
+    }
+
+    public User(String email) {
+        this.email = email;
     }
 }

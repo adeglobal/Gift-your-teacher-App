@@ -1,7 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.controller.UserLoginController;
-import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
+import com.decagon.rewardyourteacherapi.enums.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -21,11 +21,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {UserLoginController.class})
+@ContextConfiguration(classes = {UserController.class})
 @ExtendWith(SpringExtension.class)
 class UserControllerTest {
     @Autowired
-    private UserLoginController userController;
+    private UserController userController;
 
     @MockBean
     private UserService userService;
@@ -39,7 +39,7 @@ class UserControllerTest {
         loginDto.setEmail("global@gmail.com");
         loginDto.setPassword("1234");
         String content = (new ObjectMapper()).writeValueAsString(loginDto);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/user/register/teacher")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
@@ -55,8 +55,8 @@ class UserControllerTest {
         user.setLastName("king");
         user.setEmail("test@gamil.com");
         String content = (new ObjectMapper()).writeValueAsString(user);
-        when(userService.signUpUser(user)).thenReturn(user);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
+        when(userService.signUpUser(user)).thenReturn(PayloadToModel.MapUserToDTO(user));
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
@@ -64,4 +64,3 @@ class UserControllerTest {
     }
 
 }
-

@@ -12,19 +12,19 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class SchoolServiceImpl implements SchoolService {
-    private final SchoolRepository repo;
+    private final SchoolRepository schoolRepository;
     @Override
     public int getSchools() {
-        return repo.findAll().size();
+        return schoolRepository.findAll().size();
     }
 
     @Override
     public List<School> saveSchools(List<School> school) {
-        return repo.saveAll(school);
+        return schoolRepository.saveAll(school);
     }
 
     @Override
     public Page<School> retrieveSchools(int page, int size) {
-       return repo.findAll(PageRequest.of(page,size));
+       return schoolRepository.findAll(PageRequest.of(page,size));
     }
 }

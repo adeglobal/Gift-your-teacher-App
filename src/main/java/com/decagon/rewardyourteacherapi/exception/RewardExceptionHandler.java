@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.controller;
+package com.decagon.rewardyourteacherapi.exception;
 
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
