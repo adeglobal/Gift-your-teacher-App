@@ -21,11 +21,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {UserLoginController.class})
+@ContextConfiguration(classes = {UserController.class})
 @ExtendWith(SpringExtension.class)
 class UserControllerTest {
     @Autowired
-    private UserLoginController userController;
+    private UserController userController;
 
     @MockBean
     private UserService userService;
@@ -39,7 +39,7 @@ class UserControllerTest {
         loginDto.setEmail("global@gmail.com");
         loginDto.setPassword("1234");
         String content = (new ObjectMapper()).writeValueAsString(loginDto);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/user/register/teacher")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
@@ -56,7 +56,7 @@ class UserControllerTest {
         user.setEmail("test@gamil.com");
         String content = (new ObjectMapper()).writeValueAsString(user);
         when(userService.signUpUser(user)).thenReturn(PayloadToModel.MapUserToDTO(user));
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/login")
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(userController).build().perform(requestBuilder);
