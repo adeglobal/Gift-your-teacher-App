@@ -32,7 +32,7 @@ public class PaystackTransactionService {
 
     @Autowired
     WalletService walletService;
-    @Value("${paystack_secretKey}")
+    @Value("${payStack_secretKey}")
     private String payStackKey;
 
     public InitializeTransactionResponse initTransaction(FundingRequestDTO request) throws Exception {
@@ -78,7 +78,7 @@ public class PaystackTransactionService {
             HttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet("https://api.paystack.co/transaction/verify/" + reference);
             request.addHeader("Content-type", "application/json");
-            request.addHeader("Authorization", "Bearer sk_test_4eca7780fd55f4831d30f722d67e03ee49e8278d");
+            request.addHeader("Authorization", payStackKey);
 
             StringBuilder result = new StringBuilder();
 

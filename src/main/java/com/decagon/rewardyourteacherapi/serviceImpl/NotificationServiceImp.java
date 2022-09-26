@@ -81,10 +81,6 @@ public class NotificationServiceImp implements NotificationService {
         SendEmail(mailList);
     }
 
-    public Notification findNotification(String message, User user){
-        return notificationRepository.findByMessageAndUser(message, user).orElse(null);
-    }
-
     public List<SimpleMailMessage> SendEmail(List<MailDTO> mailList) {
         List<SimpleMailMessage> mailMessages = new ArrayList<>();
         for(MailDTO mail : mailList) {

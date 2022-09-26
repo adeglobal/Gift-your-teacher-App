@@ -16,12 +16,10 @@ import java.util.List;
 
 
 public interface NotificationService {
-     void  saveTransactionNotification(Transaction transaction);
+      void  saveTransactionNotification(Transaction transaction);
       void saveMessageNotification(Message message);
 
       List<SimpleMailMessage> SendEmail(List<MailDTO> mailList);
 
-    Notification findNotification(String message, User user);
-
-    List<Notification> retrieveUserNotification(Long id);
+      List<Notification> retrieveUserNotification(Long id);
 }
