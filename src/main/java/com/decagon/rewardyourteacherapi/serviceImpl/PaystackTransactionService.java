@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -17,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,11 +27,13 @@ import java.io.InputStreamReader;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaystackTransactionService {
 
     @Autowired
     WalletService walletService;
+    @Value("${paystack_secretKey}")
+    private String payStackKey;
 
     public InitializeTransactionResponse initTransaction(FundingRequestDTO request) throws Exception {
         InitializeTransactionResponse initializeTransactionResponse;
@@ -42,7 +46,7 @@ public class PaystackTransactionService {
             HttpPost post = new HttpPost("https://api.paystack.co/transaction/initialize");
             post.setEntity(postingString);
             post.addHeader("Content-type", "application/json");
-            post.addHeader("Authorization", "Bearer sk_test_4eca7780fd55f4831d30f722d67e03ee49e8278d");
+            post.addHeader("Authorization", payStackKey);
             StringBuilder result = new StringBuilder();
             HttpResponse response = client.execute(post);
             if (response.getStatusLine().getStatusCode() == 200) {
@@ -55,7 +59,6 @@ public class PaystackTransactionService {
             } else {
                 throw new AuthenticationException("Error Occurred while initializing transaction");
             }
-            System.out.println(result.toString());
             ObjectMapper mapper = new ObjectMapper();
             initializeTransactionResponse = mapper.readValue(result.toString(), InitializeTransactionResponse.class);
         } catch (Exception ex) {
@@ -70,8 +73,6 @@ public class PaystackTransactionService {
     public VerifyTransactionResponse verifyTransaction(String reference) throws Exception {
 
         VerifyTransactionResponse payStackResponse;
-        System.out.println(reference);
-
         try {
 
             HttpClient client = HttpClientBuilder.create().build();
@@ -107,13 +108,10 @@ public class PaystackTransactionService {
                 System.err.println("You've already made payment or An error occurred while verifying payment ");
                 return null;
             }
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new Exception("Internal server error");
         }
-
         return payStackResponse;
     }
 

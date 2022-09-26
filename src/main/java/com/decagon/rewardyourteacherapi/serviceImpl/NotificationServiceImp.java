@@ -8,6 +8,7 @@ import com.decagon.rewardyourteacherapi.payload.MailDTO;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -23,6 +24,9 @@ import static com.decagon.rewardyourteacherapi.enums.MessageType.*;
 public class NotificationServiceImp implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+
+    @Value("${spring.mail.username}")
+    private String sender;
 
     JavaMailSender javaMailSender;
 
@@ -78,7 +82,7 @@ public class NotificationServiceImp implements NotificationService {
         List<SimpleMailMessage> mailMessages = new ArrayList<>();
         for(MailDTO mail : mailList) {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setFrom("olamiretj@gmail.com");
+            mailMessage.setFrom(sender);
             mailMessage.setTo(mail.getUser().getEmail());
             mailMessage.setSubject(mail.getSubject());
             mailMessage.setText(mail.getMessage());
