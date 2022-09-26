@@ -1,6 +1,5 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -15,9 +14,9 @@ public class TeacherController {
     @Autowired
     UserService userService;
 
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> editProfile(@PathVariable(name = "id") long id, @RequestBody UserDTO request) {
-        return Responder.okay(userService.updateUserProfile(request, id));
+    @PostMapping(value = "/update")
+    public ResponseEntity<APIResponse> editProfile(@RequestBody UserDTO request) {
+        return Responder.okay(userService.updateUserProfile(request));
     }
 
     @GetMapping(value = "/{id}")

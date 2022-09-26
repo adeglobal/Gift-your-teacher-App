@@ -1,6 +1,6 @@
 package com.decagon.rewardyourteacherapi.payload;
 
-import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.enums.Role;
 import lombok.*;
 
 import java.math.BigDecimal;

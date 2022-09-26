@@ -1,8 +1,7 @@
 package com.decagon.rewardyourteacherapi.controller;
 
-import com.decagon.rewardyourteacherapi.controller.UserLoginController;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
-import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.enums.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;

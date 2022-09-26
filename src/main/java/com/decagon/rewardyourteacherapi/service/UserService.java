@@ -1,6 +1,5 @@
 package com.decagon.rewardyourteacherapi.service;
 
-import com.decagon.rewardyourteacherapi.model.Role;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import org.springframework.data.domain.Page;

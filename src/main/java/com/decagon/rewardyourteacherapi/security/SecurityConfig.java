@@ -1,6 +1,5 @@
 package com.decagon.rewardyourteacherapi.security;
 
-import com.decagon.rewardyourteacherapi.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
-import static com.decagon.rewardyourteacherapi.model.Role.*;
+import static com.decagon.rewardyourteacherapi.enums.Role.*;
 
 @Configuration
 @EnableWebSecurity

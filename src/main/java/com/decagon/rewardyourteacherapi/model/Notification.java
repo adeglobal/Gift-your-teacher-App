@@ -24,7 +24,7 @@ public class Notification {
     private LocalDateTime createdAt;
 
 
-    public Notification(String message, User user){
+    public Notification(User user, String message){
         this.user = user;
         this.message = message;
     }

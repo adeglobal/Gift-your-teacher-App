@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.model;
 
 
+import com.decagon.rewardyourteacherapi.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
