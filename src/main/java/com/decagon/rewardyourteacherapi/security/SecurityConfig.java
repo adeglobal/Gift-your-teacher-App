@@ -44,14 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/user/**",
-                        "/index", "/api/v1/school/retrieveSchools", "/api/v1/mail/**", "/api/v1/loggedOut",
-                        "/api/v1/viewSingleTeacherByEmail","/api/v1/viewSingleTeacherById", "/swagger-ui/**")
+                        "/index", "/api/v1/school/retrieveSchools", "/api/v1/mail/**", "/api/v1/loggedOut", "/swagger-ui/**")
                 .permitAll()
-                .antMatchers("/api/v1/user/wallet-balance/**", "api/v1/teacher/**", "api/v1/student/**", "api/v1/user/transaction-history","api/v1/user/wallet-balance").authenticated()
                 .antMatchers("/api/v1/student/test", "api/v1/school/{id}/{page}&{size}", "/api/v1/student/test?={reference}","api/v1/student/wallet-fund" ).hasRole(STUDENT.name())
-                .antMatchers(HttpMethod.POST, "api/v1/student/{id}").hasRole(STUDENT.name())
-                .antMatchers(HttpMethod.POST, "api/v1/teacher/{id}").hasRole(TEACHER.name())
-                .antMatchers("/api/**").authenticated().and()
+                .antMatchers(HttpMethod.POST, "api/v1/student/update").hasRole(STUDENT.name())
+                .antMatchers(HttpMethod.POST, "api/v1/teacher/update").hasRole(TEACHER.name())
+                .and()
                 .exceptionHandling().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .logout()

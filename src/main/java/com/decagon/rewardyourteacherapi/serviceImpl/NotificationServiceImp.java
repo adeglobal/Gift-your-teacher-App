@@ -99,8 +99,6 @@ public class NotificationServiceImp implements NotificationService {
         return mailMessages;
     }
 
-
-
     public List<Notification> retrieveUserNotification(Long id){
       User user = new User(id);
       return  notificationRepository.findNotificationsByUser(user);

@@ -28,7 +28,7 @@ public class StudentController {
 
     private PaystackTransactionService transaction;
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/update")
     public ResponseEntity<APIResponse> editStudentProfile(@RequestBody UserDTO request) {
         return Responder.okay(userService.updateUserProfile(request));
     }
