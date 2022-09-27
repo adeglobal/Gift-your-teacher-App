@@ -5,14 +5,11 @@ import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
+import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.model.Role;
-import com.decagon.rewardyourteacherapi.model.Role;
-import com.decagon.rewardyourteacherapi.model.School;
-import com.decagon.rewardyourteacherapi.model.Role;
-import com.decagon.rewardyourteacherapi.model.User;
-import com.decagon.rewardyourteacherapi.model.Wallet;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
+import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
@@ -23,8 +20,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import lombok.ToString;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +45,8 @@ public class UserServiceImpl implements UserService {
 
     private final WalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final NotificationRepository notificationRepository;
 
 
     public String login(LoginDTO loginDto){
@@ -153,6 +151,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User viewTeacherProfileById(Long id) {
         return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    }
+
+    @Override
+    public Notification teacherAppreciatesStudent(Long userId){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+
+        Optional<User> teacher = userRepository.findUserByEmailAndRole(email, Role.TEACHER);
+        String teacherDetails = teacher.get().getFirstName() + " " + teacher.get().getLastName();
+        User student = userRepository.findUserByIdAndRole(userId, Role.STUDENT).get();
+        String messageToStudent = String.format("%s appreciated you \uD83D\uDC4D", teacherDetails);
+        Notification notification = new Notification(messageToStudent, student);
+        Notification notification1 = notificationRepository.save(notification);
+       return PayloadToModel.NotificationMapper(notification1);
     }
 
 }

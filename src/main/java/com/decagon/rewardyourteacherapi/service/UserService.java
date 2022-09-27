@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.service;
 
+import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 
 @Service
 public interface UserService {
@@ -28,6 +30,8 @@ public interface UserService {
     User viewTeacherProfileByEmail(String email);
 
     User viewTeacherProfileById(Long id);
+
+    Notification teacherAppreciatesStudent(Long userId);
 
 
 

@@ -20,4 +20,8 @@ public class TeacherController {
         request.setRole(Role.TEACHER);
         return Responder.okay(userService.updateUserProfile(request, id));
     }
+    @PostMapping("/appreciate/{id}")
+    public ResponseEntity<APIResponse> appreciateStudent(@PathVariable(name = "id") Long id){
+        return Responder.okay(userService.teacherAppreciatesStudent(id));
+    }
 }
