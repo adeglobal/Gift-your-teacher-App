@@ -23,7 +23,7 @@ public class User {
     private String email;
     private String password;
     private String profileImage;
-    private BigDecimal wallet;
+    private BigDecimal wallet = new BigDecimal(0.0);
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne
