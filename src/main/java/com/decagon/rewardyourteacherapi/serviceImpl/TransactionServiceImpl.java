@@ -6,6 +6,7 @@ import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.service.TransactionService;
+import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +26,9 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public List<Transaction> transactionHistory(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("user not found"));
-        System.out.println(user);
+    public List<Transaction> transactionHistory() {
+        User user = userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(()->
+                new UserNotFoundException(String.format("user with email: %s not found", ContextEmail.getEmail())));
         return transactionRepository.findTransactionsBySender(user);
     }
 

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TransactionService {
 
-    List<Transaction> transactionHistory(Long id);
+    List<Transaction> transactionHistory();
 }

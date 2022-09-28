@@ -7,13 +7,16 @@ import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.model.Role;
+import com.decagon.rewardyourteacherapi.enums.Role;
+import com.decagon.rewardyourteacherapi.model.School;
+import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
-import com.decagon.rewardyourteacherapi.repository.WalletRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
+import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,8 +26,6 @@ import lombok.ToString;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +43,6 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-
-    private final WalletRepository walletRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final NotificationRepository notificationRepository;
@@ -60,7 +59,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User signUpUser(User user) {
+    public UserDTO signUpUser(User user) {
         boolean userExists = userRepository
                 .findByEmail(user.getEmail())
                 .isPresent();
@@ -68,57 +67,43 @@ public class UserServiceImpl implements UserService {
         if (userExists) {
             throw new UserAlreadyExistsException(String.format("Email %s has been taken", user.getEmail()));
         }
-        String encodedPassword = passwordEncoder
-                .encode(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        userRepository.save(user);
-        return user;
+        return PayloadToModel.MapUserToDTO(userRepository.save(user));
     }
 
     public String authenticateOauth2User(UserDTO request) {
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
         if(existingUser.isEmpty()){
             User newUser = PayloadToModel.MapRequestToUser(request);
+            newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
             userRepository.save(newUser);
         }
         return "Bearer " + JwtService.generateToken
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPassword(),
                         new ArrayList<>()));
     }
-    public User updateUserProfile (UserDTO userRegistrationDTO, long id){
-        System.out.println(userRegistrationDTO + "" + id);
-        User newUserDetails =userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-//        System.out.println(newUserDetails);
-        if(userRegistrationDTO.getFirstname()!=null){
-            newUserDetails.setFirstName(userRegistrationDTO.getFirstname());
+    public UserDTO updateUserProfile (UserDTO userRegistrationDTO){
+        User dBUser =userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        if (userRegistrationDTO.getFirstname() != null) {
+            dBUser.setFirstName(userRegistrationDTO.getFirstname());
         }
-        if (userRegistrationDTO.getLastname()!=null){
-            newUserDetails.setLastName(userRegistrationDTO.getLastname());
+        if (userRegistrationDTO.getLastname() != null) {
+            dBUser.setLastName(userRegistrationDTO.getLastname());
         }
-        if (userRegistrationDTO.getPassword()!=null){
-            newUserDetails.setPassword(userRegistrationDTO.getPassword());
+        if (userRegistrationDTO.getPassword() != null) {
+            dBUser.setPassword(userRegistrationDTO.getPassword());
         }
-        if (userRegistrationDTO.getImageUrl()!= null) {
-            newUserDetails.setProfileImage(userRegistrationDTO.getImageUrl());
+        if (userRegistrationDTO.getImageUrl() != null) {
+            dBUser.setProfileImage(userRegistrationDTO.getImageUrl());
         }
-
-      return userRepository.save(newUserDetails);
-
+        return PayloadToModel.MapUserToDTO(userRepository.save(dBUser));
     }
 
     @Override
-    public BigDecimal getCurrentWalletBalance(Long user_id) {
-        Optional<User> user = userRepository.findById(user_id);
-
-        if (user.isPresent()){
-            Optional<Wallet> wallet = walletRepository.findWalletById(user.get().getId());
-
-            if(wallet.isPresent()){
-
-                return wallet.get().getTotal();
-            }
-        }
-        return new BigDecimal(0.0);
+    public BigDecimal getCurrentWalletBalance() {
+        User user = userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        return user.getWallet();
     }
 
     @Override
@@ -137,20 +122,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> retrieveTeachers(int page, int size) {
-        return userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
-    }
-    @Override
-   public User viewTeacherProfileByEmail(String email){
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String email = ((UserDetails)principal).getUsername();
-
-        return userRepository.findUserByEmailAndRole(email, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    public Page<UserDTO> retrieveTeachers(int page, int size) {
+        Page<User> userPage= userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
+        List<UserDTO> userDTOList = userPage.stream().map(PayloadToModel::MapUserToDTO).collect(Collectors.toList());
+        return new PageImpl<>(userDTOList, PageRequest.of(page, size), userPage.getTotalElements());
     }
 
     @Override
-    public User viewTeacherProfileById(Long id) {
-        return userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    public UserDTO viewTeacherProfile(Long id) {
+        return PayloadToModel.MapUserToDTO(userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found")));
+    }
+
+    public List<UserDTO> searchTeacher(String name){
+        List<User> list = userRepository.findUsersByRoleAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(Role.TEACHER,name, name);
+        return  list.stream().map(PayloadToModel::MapUserToDTO).collect(Collectors.toList());
     }
 
     @Override

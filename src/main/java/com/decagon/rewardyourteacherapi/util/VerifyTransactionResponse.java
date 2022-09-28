@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,7 +25,8 @@ public class VerifyTransactionResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @Getter
     @Setter
-    public class Data {
+    @ToString
+    public static class Data {
       private int id;
       private String domain;
       private String status;
@@ -57,5 +59,11 @@ public class VerifyTransactionResponse {
         this.message = message;
     }
 
+    public Data getData() {
+        return data;
+    }
 
+    public void setData(Data data) {
+        this.data = data;
+    }
 }

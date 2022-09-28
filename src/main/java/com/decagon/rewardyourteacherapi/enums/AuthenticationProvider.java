@@ -1,4 +1,4 @@
-package com.decagon.rewardyourteacherapi.model;
+package com.decagon.rewardyourteacherapi.enums;
 
 public enum AuthenticationProvider {
     LOCAL,GOOGLE

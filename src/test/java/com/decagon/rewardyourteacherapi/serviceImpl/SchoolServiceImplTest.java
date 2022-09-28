@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
+import com.decagon.rewardyourteacherapi.RewardYourTeacherApiApplication;
 import com.decagon.rewardyourteacherapi.model.School;
 import com.decagon.rewardyourteacherapi.repository.SchoolRepository;
 import org.junit.Test;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = RewardYourTeacherApiApplication.class)
 public class SchoolServiceImplTest {
     @Autowired
     private SchoolServiceImpl schoolService;
@@ -56,7 +57,7 @@ public class SchoolServiceImplTest {
 
         Mockito.when(schoolRepository.findAll(PageRequest.of(0,10))).thenReturn(page);
 
-       Page<School> schools = schoolService.retrieveSchools(0, 10);
+        Page<School> schools = schoolService.retrieveSchools(0, 10);
 
         Assertions.assertEquals(page,schools);
 

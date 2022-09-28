@@ -1,10 +1,13 @@
 package com.decagon.rewardyourteacherapi.service;
 
 
-import com.decagon.rewardyourteacherapi.model.Wallet;
-import com.decagon.rewardyourteacherapi.payload.FundWalletRequestDTO;
+
+import com.decagon.rewardyourteacherapi.payload.FundingRequestDTO;
+import com.decagon.rewardyourteacherapi.payload.UserDTO;
+
+import java.math.BigDecimal;
 
 public interface WalletService {
-    Wallet fundStudentWallet(FundWalletRequestDTO walletFundingRequestDto);
+    UserDTO fundStudentWallet(BigDecimal amount);
 
 }
