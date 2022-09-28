@@ -3,8 +3,10 @@ package com.decagon.rewardyourteacherapi.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name ="message")
@@ -21,6 +23,10 @@ public class Message {
     private User receiver;
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 
     public Message(User sender, User receiver, String content){
         this.sender = sender;

@@ -70,7 +70,7 @@ class UserServiceImplTest {
     void SignUpUser(){
         userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder);
         user2.setId(2L);
-        Assertions.assertEquals(PayloadToModel.MapUserToDTO(user2).getFirstname(), userService.signUpUser(user2).getFirstname());
+        Assertions.assertEquals(PayloadToModel.mapUserToDTO(user2).getFirstname(), userService.signUpUser(user2).getFirstname());
         Exception exception = assertThrows(RuntimeException.class, () -> userService.signUpUser(user2));
 
         String expectedMessage = "Email test2@gamil.com has been taken";

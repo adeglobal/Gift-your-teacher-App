@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping(path  ="/register/student")
     public ResponseEntity<APIResponse> registerLocal(@RequestBody UserDTO request) {
         request.setRole(Role.STUDENT);
-        return Responder.okay(userService.signUpUser(PayloadToModel.MapRequestToUser(request)));
+        return Responder.okay(userService.signUpUser(PayloadToModel.mapRequestToUser(request)));
     }
 
     @PostMapping("/register/student/callback")
@@ -36,7 +36,7 @@ public class UserController {
     @PostMapping(path  ="/register/teacher")
     public ResponseEntity<APIResponse> registerGoogle(@RequestBody UserDTO request) {
         request.setRole(Role.TEACHER);
-        return Responder.okay(userService.signUpUser(PayloadToModel.MapRequestToUser(request)));
+        return Responder.okay(userService.signUpUser(PayloadToModel.mapRequestToUser(request)));
     }
 
     @PostMapping("/register/teacher/callback")
