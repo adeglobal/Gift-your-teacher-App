@@ -24,7 +24,6 @@ public class Message {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
