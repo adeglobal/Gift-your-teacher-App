@@ -36,7 +36,7 @@ public class PayloadToModel {
        return user;
     }
 
-    public static UserDTO MapUserToDTO(User user){
+    public static UserDTO mapUserToDTO(User user){
        return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getProfileImage(),user.getWallet());
     }
 
@@ -48,6 +48,7 @@ public class PayloadToModel {
         return  new TransactionDTO(mapUserToDTO(transaction.getSender()), mapUserToDTO(transaction.getRecipient()),
                 transaction.getAmount(), transaction.getTransactionDate());
     }
+
     public static Notification  NotificationMapper(Notification notification){
         Notification notification1 = new Notification();
         if (notification != null){
