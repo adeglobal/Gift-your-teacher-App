@@ -1,9 +1,11 @@
 package com.decagon.rewardyourteacherapi.serviceImpl;
 
-import com.decagon.rewardyourteacherapi.exception.UserDoesNotExistException;
+import com.decagon.rewardyourteacherapi.enums.Role;
+import com.decagon.rewardyourteacherapi.exception.*;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
+import com.decagon.rewardyourteacherapi.payload.TransferFundsDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.repository.TransactionRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
@@ -11,9 +13,14 @@ import com.decagon.rewardyourteacherapi.service.NotificationService;
 import com.decagon.rewardyourteacherapi.service.WalletService;
 import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +41,31 @@ public class WalletServiceImpl implements WalletService {
         ts =transactionRepository.save(ts);
         notificationService.saveTransactionNotification(ts);
         return PayloadToModel.MapUserToDTO(userRepository.save(user));
+    }
+
+    @Override
+    public Transaction transferFunds(TransferFundsDTO request) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+        //User sender = userRepository.findUserByEmailAndRole(email,Role.STUDENT).orElseThrow(() ->new UserDoesNotExistException(String.format("student with %s not found",email)));
+        User sender = userRepository.findByEmail(email).orElseThrow(() -> new UserDoesNotExistException(String.format("Student with %s not found", email)));
+        if(sender.getWallet().compareTo(request.getAmount()) < 0){
+            throw new WalletException("Insufficient funds");
+        }
+        User receiver = userRepository.findUserByIdAndRole(request.getId(), Role.TEACHER). orElseThrow(()-> new UserDoesNotExistException("user not found"));
+        BigDecimal sBalance = sender.getWallet();
+        BigDecimal rBalance = receiver.getWallet();
+        sBalance = sBalance.subtract(request.getAmount());
+        rBalance = rBalance.add(request.getAmount());
+        sender.setWallet(sBalance);
+        receiver.setWallet(rBalance);
+        List<User> users = new ArrayList<>();
+        userRepository.saveAll(users);
+        Transaction transaction = new Transaction(sender, receiver, request.getAmount());
+        transactionRepository.save(transaction);
+        notificationService.saveTransactionNotification(transaction);
+        return transaction;
+
     }
 }
 

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
                     new ArrayList<>()));
         }else{
-            throw new AuthorizationException("Not Authenticated ");
+            throw new AuthorizationException("Email or password Not Authenticated ");
         }
     }
 

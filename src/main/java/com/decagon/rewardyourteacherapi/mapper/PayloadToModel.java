@@ -25,10 +25,15 @@ public class PayloadToModel {
        if(request.getImageUrl() != null){
            user.setProfileImage(request.getImageUrl());
        }
+        if(request.getPhoneNumber() != null){
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
        return user;
     }
 
     public static UserDTO MapUserToDTO(User user){
-       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getWallet() ,user.getProfileImage());
+       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getProfileImage(),user.getWallet());
     }
 }
+
+

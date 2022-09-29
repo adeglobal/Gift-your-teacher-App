@@ -11,20 +11,26 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class UserDTO {
     private Long id;
+
     private String firstname;
     private String lastname;
     private String email;
     private String password;
-    private Role role;
-    private BigDecimal wallet;
+    private  String phoneNumber;
     private String imageUrl;
+    private BigDecimal wallet;
 
-    public UserDTO(Long id, String firstname, String lastname, BigDecimal wallet, String imageUrl) {
+    private Role role;
+
+
+
+    public UserDTO(Long id, String firstname, String lastname, String phoneNumber, String imageUrl,BigDecimal wallet) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.wallet = wallet;
         this.imageUrl = imageUrl;
+        this.wallet = wallet;
+        this.phoneNumber = phoneNumber;
     }
     public UserDTO(String firstname, String lastname, String imageUrl) {
         this.firstname = firstname;

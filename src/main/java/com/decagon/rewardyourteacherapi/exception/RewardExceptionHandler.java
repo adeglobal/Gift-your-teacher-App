@@ -26,5 +26,9 @@ public class RewardExceptionHandler {
     public ResponseEntity<APIResponse> UserNotFound (UserNotFoundException ex){
         return  Responder.notFound (ex.getMessage());
     }
+    @ExceptionHandler(WalletException.class)
+    public ResponseEntity<APIResponse> walletException (WalletException ex){
+        return  Responder.notFound (ex.getMessage());
+    }
 
 }

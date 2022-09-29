@@ -15,9 +15,8 @@ public class Responder {
         return  new  ResponseEntity<>(new APIResponse("Request Successful", true, response), HttpStatus.OK);
     }
 
-    public static ResponseEntity<APIResponse> notFound(String resource){
-        return  new ResponseEntity<>(new APIResponse("Requested " + resource
-                + " Was Not Found", true, null), HttpStatus.NOT_FOUND);
+    public static ResponseEntity<APIResponse> notFound(String message){
+        return  new ResponseEntity<>(new APIResponse(message,true, null), HttpStatus.NOT_FOUND);
     }
 
     public static ResponseEntity<APIResponse> alreadyExists(String message){

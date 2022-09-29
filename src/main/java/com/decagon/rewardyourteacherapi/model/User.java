@@ -23,7 +23,10 @@ public class User {
     private String email;
     private String password;
     private String profileImage;
+    @Column(columnDefinition = "integer default 0")
     private BigDecimal wallet;
+
+    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne

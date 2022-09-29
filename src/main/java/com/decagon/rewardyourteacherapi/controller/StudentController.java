@@ -1,12 +1,13 @@
 package com.decagon.rewardyourteacherapi.controller;
 
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
+import com.decagon.rewardyourteacherapi.payload.TransferFundsDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.serviceImpl.PaystackTransactionService;
 import com.decagon.rewardyourteacherapi.payload.FundingRequestDTO;
 import com.decagon.rewardyourteacherapi.util.Responder;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.decagon.rewardyourteacherapi.service.WalletService;
@@ -19,14 +20,15 @@ import java.math.BigDecimal;
 
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/v1/student")
 public class StudentController {
 
-    UserService userService;
+  private final UserService userService;
 
-    private WalletService walletService;
+    private final WalletService walletService;
 
-    private PaystackTransactionService transaction;
+    private final PaystackTransactionService transaction;
 
     @PostMapping(value = "/update")
     public ResponseEntity<APIResponse> editStudentProfile(@RequestBody UserDTO request) {
@@ -47,5 +49,12 @@ public class StudentController {
     public ResponseEntity<?> pay(@PathVariable("reference") String request) throws Exception{
         return ResponseEntity.ok(transaction.verifyTransaction(request));
     }
+
+    @PostMapping("/wallet-transfer")
+    public ResponseEntity<APIResponse> rewardTeacher(@RequestBody TransferFundsDTO request) {
+        return Responder.okay(walletService.transferFunds(request));
+    }
+
+
 
 }
