@@ -4,6 +4,7 @@ import com.decagon.rewardyourteacherapi.RewardYourTeacherApiApplication;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
+import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -44,6 +45,8 @@ class UserServiceImplTest {
     JwtService jwtService;
     @MockBean
     PasswordEncoder passwordEncoder;
+    @MockBean
+    NotificationRepository notificationRepository;
 
 
     @MockBean
@@ -68,9 +71,9 @@ class UserServiceImplTest {
 
     @Test
     void SignUpUser(){
-        userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder);
+        userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder, notificationRepository);
         user2.setId(2L);
-        Assertions.assertEquals(PayloadToModel.MapUserToDTO(user2).getFirstname(), userService.signUpUser(user2).getFirstname());
+        Assertions.assertEquals(PayloadToModel.mapUserToDTO(user2).getFirstname(), userService.signUpUser(user2).getFirstname());
         Exception exception = assertThrows(RuntimeException.class, () -> userService.signUpUser(user2));
 
         String expectedMessage = "Email test2@gamil.com has been taken";
@@ -84,14 +87,14 @@ class UserServiceImplTest {
         Pageable pageable = PageRequest.of(0, 5);
         List<UserDTO> list= new ArrayList<>();
         Page<UserDTO> page = new PageImpl<>(list, pageable, 0);
-        userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder);
+        userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder, notificationRepository);
         Assertions.assertEquals(page, userService.getSchoolTeachers(1L, 0,5));
     }
 
     @Test
     void searchTeacher() {
         List<UserDTO>userList = new ArrayList<>();
-        userService = new UserServiceImpl( authenticationManager ,userRepository, passwordEncoder);
+        userService = new UserServiceImpl( authenticationManager ,userRepository, passwordEncoder, notificationRepository);
         Assertions.assertEquals(userList, userService.searchTeacher("bukky"));
     }
 

@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.service;
 
+import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.security.Principal;
 
 @Service
 public interface UserService {
@@ -27,6 +29,8 @@ public interface UserService {
     Page<UserDTO> retrieveTeachers(int page, int size);
 
     UserDTO viewTeacherProfile(Long id);
+
+    Notification teacherAppreciatesStudent(Long userId);
 
     List<UserDTO> searchTeacher(String name);
 

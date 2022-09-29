@@ -40,7 +40,7 @@ public class WalletServiceImpl implements WalletService {
         Transaction ts = new Transaction(user, user, amount);
         ts =transactionRepository.save(ts);
         notificationService.saveTransactionNotification(ts);
-        return PayloadToModel.MapUserToDTO(userRepository.save(user));
+        return PayloadToModel.mapUserToDTO(userRepository.save(user));
     }
 
     @Override

@@ -32,4 +32,8 @@ public class TeacherController {
         return Responder.okay(userService.retrieveTeachers(page, size));
     }
 
+    @PostMapping("/appreciate/{id}")
+    public ResponseEntity<APIResponse> appreciateStudent(@PathVariable(name = "id") Long id){
+        return Responder.okay(userService.teacherAppreciatesStudent(id));
+    }
 }
