@@ -55,7 +55,7 @@ class UserControllerTest {
         user.setLastName("king");
         user.setEmail("test@gamil.com");
         String content = (new ObjectMapper()).writeValueAsString(user);
-        when(userService.signUpUser(user)).thenReturn(PayloadToModel.MapUserToDTO(user));
+        when(userService.signUpUser(user)).thenReturn(PayloadToModel.mapUserToDTO(user));
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);

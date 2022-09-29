@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -24,5 +25,18 @@ public class School{
 
     public School(long id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof School)) return false;
+        School school = (School) o;
+        return getSchoolName().equals(school.getSchoolName()) && getSchoolType().equals(school.getSchoolType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSchoolName(), getSchoolType());
     }
 }

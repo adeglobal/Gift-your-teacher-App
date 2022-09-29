@@ -2,11 +2,14 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
 import com.decagon.rewardyourteacherapi.enums.Role;
+import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
+import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.model.Message;
 import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.MailDTO;
+import com.decagon.rewardyourteacherapi.payload.NotificationDTO;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.decagon.rewardyourteacherapi.enums.MessageType.*;
 
@@ -89,10 +93,10 @@ public class NotificationServiceImp implements NotificationService {
         return mailMessages;
     }
 
-    public List<Notification> retrieveUserNotification(Long id){
+    public List<NotificationDTO> retrieveUserNotification(Long id){
       User user = new User(id);
-      return  notificationRepository.findNotificationsByUser(user);
-
+      List<Notification> notifications = notificationRepository.findNotificationsByUser(user);
+      return  notifications.stream().map(PayloadToModel::mapNotToDTO).collect(Collectors.toList());
     }
 
 

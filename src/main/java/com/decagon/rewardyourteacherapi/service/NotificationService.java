@@ -2,15 +2,10 @@ package com.decagon.rewardyourteacherapi.service;
 
 
 import com.decagon.rewardyourteacherapi.model.Message;
-import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.Transaction;
-import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.MailDTO;
+import com.decagon.rewardyourteacherapi.payload.NotificationDTO;
 import org.springframework.mail.SimpleMailMessage;
-
-import java.util.List;
-import com.decagon.rewardyourteacherapi.model.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -21,5 +16,5 @@ public interface NotificationService {
 
       List<SimpleMailMessage> SendEmail(List<MailDTO> mailList);
 
-      List<Notification> retrieveUserNotification(Long id);
+      List<NotificationDTO> retrieveUserNotification(Long id);
 }
