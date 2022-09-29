@@ -53,12 +53,12 @@ public class WalletServiceImpl implements WalletService {
             throw new WalletException("Insufficient funds");
         }
         User receiver = userRepository.findUserByIdAndRole(request.getId(), Role.TEACHER). orElseThrow(()-> new UserDoesNotExistException("user not found"));
-        BigDecimal sBalance = sender.getWallet();
-        BigDecimal rBalance = receiver.getWallet();
-        sBalance = sBalance.subtract(request.getAmount());
-        rBalance = rBalance.add(request.getAmount());
-        sender.setWallet(sBalance);
-        receiver.setWallet(rBalance);
+        BigDecimal senderBalance = sender.getWallet();
+        BigDecimal receiverBalance = receiver.getWallet();
+        senderBalance = senderBalance.subtract(request.getAmount());
+        receiverBalance = receiverBalance.add(request.getAmount());
+        sender.setWallet(senderBalance);
+        receiver.setWallet(receiverBalance);
         List<User> users = new ArrayList<>();
         userRepository.saveAll(users);
         Transaction transaction = new Transaction(sender, receiver, request.getAmount());
