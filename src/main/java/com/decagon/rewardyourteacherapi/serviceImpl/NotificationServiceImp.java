@@ -3,7 +3,6 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.enums.Role;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
-import com.decagon.rewardyourteacherapi.model.*;
 import com.decagon.rewardyourteacherapi.model.Message;
 import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.Transaction;

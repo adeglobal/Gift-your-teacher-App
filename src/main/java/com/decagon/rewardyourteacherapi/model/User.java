@@ -24,6 +24,7 @@ public class User {
     private String password;
     private String profileImage;
     private BigDecimal wallet = new BigDecimal(0.0);
+    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne

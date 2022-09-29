@@ -30,11 +30,14 @@ public class PayloadToModel {
        if(request.getImageUrl() != null){
            user.setProfileImage(request.getImageUrl());
        }
+        if(request.getPhoneNumber() != null){
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
        return user;
     }
 
     public static UserDTO mapUserToDTO(User user){
-       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getWallet() ,user.getProfileImage());
+       return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getProfileImage(),user.getWallet());
     }
 
     public static NotificationDTO mapNotToDTO(Notification notification){
@@ -45,6 +48,7 @@ public class PayloadToModel {
         return  new TransactionDTO(mapUserToDTO(transaction.getSender()), mapUserToDTO(transaction.getRecipient()),
                 transaction.getAmount(), transaction.getTransactionDate());
     }
+
     public static Notification  NotificationMapper(Notification notification){
         Notification notification1 = new Notification();
         if (notification != null){
@@ -54,3 +58,5 @@ public class PayloadToModel {
         return  notification1;
     }
 }
+
+
