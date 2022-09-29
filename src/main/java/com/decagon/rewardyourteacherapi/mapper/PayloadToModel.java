@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.mapper;
 
 import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.Transaction;
+import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.NotificationDTO;
 import com.decagon.rewardyourteacherapi.payload.TransactionDTO;
@@ -43,5 +44,13 @@ public class PayloadToModel {
     public static TransactionDTO mapTransactToDTO(Transaction transaction){
         return  new TransactionDTO(mapUserToDTO(transaction.getSender()), mapUserToDTO(transaction.getRecipient()),
                 transaction.getAmount(), transaction.getTransactionDate());
+    }
+    public static Notification  NotificationMapper(Notification notification){
+        Notification notification1 = new Notification();
+        if (notification != null){
+            notification1.setMessage(notification.getMessage());
+        }
+
+        return  notification1;
     }
 }
