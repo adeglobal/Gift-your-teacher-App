@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<UserDTO> searchTeacher(String name){
-        List<User> list = userRepository.findUsersByRoleAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(Role.TEACHER,name, name);
+        List<User> list = userRepository.findUsersByRoleAndNameContainingIgnoreCase(Role.TEACHER, name);
         return  list.stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());
     }
 

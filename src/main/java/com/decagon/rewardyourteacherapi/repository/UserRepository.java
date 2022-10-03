@@ -18,15 +18,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findUsersByRole(Pageable pageable, Role role);
 
 
-    List<User> findUsersByRoleAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-            Role role, String name, String name2);
+    List<User> findUsersByRoleAndNameContainingIgnoreCase(
+            Role role, String name);
 
     Page<User> findAllBySchoolAndRole(School school, Role role, Pageable pageable);
 
     Optional<User> findUserByEmailAndRole(String email, Role role);
 
     Optional<User> findUserByIdAndRole (Long id , Role role);
-    Optional<User> findUserByFirstNameAndPhoneNumberAndRole(String firstName, String phoneNumber, Role role);
+//    Optional<User> findUserByFirstNameAndPhoneNumberAndRole(String firstName, String phoneNumber, Role role);
 
 
 }
