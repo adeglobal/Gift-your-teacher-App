@@ -51,7 +51,7 @@ class UserControllerTest {
         User user = new User();
         user.setRole(Role.TEACHER);
         user.setPassword("pass");
-        user.setFirstName("george");
+        user.setName("george");
         user.setLastName("king");
         user.setEmail("test@gamil.com");
         String content = (new ObjectMapper()).writeValueAsString(user);

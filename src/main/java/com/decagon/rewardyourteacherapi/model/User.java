@@ -18,8 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String password;
     private String profileImage;
@@ -31,17 +30,15 @@ public class User {
     @JoinColumn(name = "school_id")
     private School school;
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String name, String email, String password, Role role) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
-    public User(long id, String firstName, String lastName, String email, String password) {
+    public User(long id, String name, String email, String password) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -49,10 +46,9 @@ public class User {
     public User(long id) {
         this.id = id;
     }
-    public User(long id, String firstName, String lastName, String profileImage) {
+    public User(long id, String name, String profileImage) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.profileImage = profileImage;
     }
 

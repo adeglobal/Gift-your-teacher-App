@@ -29,7 +29,7 @@ public class UserController {
     public ResponseEntity<APIResponse> authenticateOauth2User(@RequestBody UserDTO request){
         request.setRole(Role.STUDENT);
         request.setPassword("");
-        System.out.println(request.getFirstname()+" "+request.getLastname());
+
         return Responder.okay(userService.authenticateOauth2User(request));
     }
 

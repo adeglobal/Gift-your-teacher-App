@@ -52,7 +52,7 @@ class UserServiceImplTest {
     @MockBean
     SecurityContextHolder securityContextHolder;
 
-    User user2 = new User( "george", "victim", "test2@gamil.com", "password", TEACHER);
+    User user2 = new User( "george", "test2@gamil.com", "password", TEACHER);
 
 
 
@@ -73,7 +73,7 @@ class UserServiceImplTest {
     void SignUpUser(){
         userService =  new UserServiceImpl(authenticationManager, userRepository, passwordEncoder, notificationRepository);
         user2.setId(2L);
-        Assertions.assertEquals(PayloadToModel.mapUserToDTO(user2).getFirstname(), userService.signUpUser(user2).getFirstname());
+        Assertions.assertEquals(PayloadToModel.mapUserToDTO(user2).getName(), userService.signUpUser(user2).getName());
         Exception exception = assertThrows(RuntimeException.class, () -> userService.signUpUser(user2));
 
         String expectedMessage = "Email test2@gamil.com has been taken";

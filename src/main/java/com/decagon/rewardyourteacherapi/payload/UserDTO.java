@@ -12,8 +12,7 @@ import java.math.BigDecimal;
 public class UserDTO {
     private Long id;
 
-    private String firstname;
-    private String lastname;
+    private String name;
     private String email;
     private String password;
     private  String phoneNumber;
@@ -24,17 +23,18 @@ public class UserDTO {
 
 
 
-    public UserDTO(Long id, String firstname, String lastname, String phoneNumber, String imageUrl,BigDecimal wallet) {
+    public UserDTO(Long id, String name, String lastname, String phoneNumber, String imageUrl, BigDecimal wallet) {
         this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.name = name;
         this.imageUrl = imageUrl;
         this.wallet = wallet;
         this.phoneNumber = phoneNumber;
     }
-    public UserDTO(String firstname, String lastname, String imageUrl) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+    public UserDTO(String name, String lastname, String imageUrl) {
+        this.name = name;
         this.imageUrl = imageUrl;
+    }
+
+    public UserDTO(long id, String name, String phoneNumber, String profileImage, BigDecimal wallet) {
     }
 }

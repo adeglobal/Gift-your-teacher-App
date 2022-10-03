@@ -85,11 +85,8 @@ public class UserServiceImpl implements UserService {
     }
     public UserDTO updateUserProfile (UserDTO userRegistrationDTO){
         User dBUser =userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-        if (userRegistrationDTO.getFirstname() != null) {
-            dBUser.setFirstName(userRegistrationDTO.getFirstname());
-        }
-        if (userRegistrationDTO.getLastname() != null) {
-            dBUser.setLastName(userRegistrationDTO.getLastname());
+        if (userRegistrationDTO.getName() != null) {
+            dBUser.setName(userRegistrationDTO.getName());
         }
         if (userRegistrationDTO.getPassword() != null) {
             dBUser.setPassword(userRegistrationDTO.getPassword());
@@ -144,7 +141,7 @@ public class UserServiceImpl implements UserService {
         String email = ((UserDetails)principal).getUsername();
 
         User teacher = userRepository.findUserByEmailAndRole(email, Role.TEACHER).orElseThrow(()-> new UserNotFoundException("user not found"));
-        String teacherDetails = teacher.getFirstName() + " " + teacher.getLastName();
+        String teacherDetails = teacher.getName() + " " + teacher.getName();
         User student = userRepository.findUserByIdAndRole(userId, Role.STUDENT).orElseThrow(() -> new UserNotFoundException("user not found"));
         String messageToStudent = String.format("%s appreciated you \uD83D\uDC4D", teacherDetails);
         Notification notification = new Notification( student, messageToStudent);
