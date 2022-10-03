@@ -52,7 +52,7 @@ class UserControllerTest {
         user.setRole(Role.TEACHER);
         user.setPassword("pass");
         user.setName("george");
-        user.setLastName("king");
+//        user.setLastName("king");
         user.setEmail("test@gamil.com");
         String content = (new ObjectMapper()).writeValueAsString(user);
         when(userService.signUpUser(user)).thenReturn(PayloadToModel.mapUserToDTO(user));
