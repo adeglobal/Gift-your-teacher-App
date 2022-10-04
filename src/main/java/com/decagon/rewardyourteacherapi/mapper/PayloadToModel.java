@@ -27,15 +27,19 @@ public class PayloadToModel {
        if(request.getImageUrl() != null){
            user.setProfileImage(request.getImageUrl());
        }
-        if(request.getPhoneNumber() != null){
-            user.setPhoneNumber(request.getPhoneNumber());
-        }
+//        if(request.getPhoneNumber() != null){
+//            user.setPhoneNumber(request.getPhoneNumber());
+//        }
        return user;
     }
 
-    public static UserDTO mapUserToDTO(User user){
+    public static User mapDTOToUser(UserDTO userDTO){
 
-       return new UserDTO(user.getId(), user.getName(), user.getPhoneNumber(), user.getProfileImage(),user.getWallet());
+       return new User( userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
+    }
+
+    public static  UserDTO mapUserToDTO(User user){
+        return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet());
     }
 
     public static NotificationDTO mapNotToDTO(Notification notification){

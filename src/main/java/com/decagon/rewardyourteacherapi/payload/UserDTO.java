@@ -7,11 +7,11 @@ import java.math.BigDecimal;
 
 
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
     private Long id;
-
+    private String schoolName;
     private String name;
     private String email;
     private String password;
@@ -20,21 +20,32 @@ public class UserDTO {
     private BigDecimal wallet;
 
     private Role role;
+    private Long yearsOfTeaching;
+    private String subjectTaught;
+    private String schoolType;
+    private String status;
+    private String about;
+    private String position;
 
 
 
-    public UserDTO(Long id, String name, String lastname, String phoneNumber, String imageUrl, BigDecimal wallet) {
+
+
+    public UserDTO(Long id, String name, String lastname, String imageUrl, BigDecimal wallet) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
         this.wallet = wallet;
-        this.phoneNumber = phoneNumber;
-    }
-    public UserDTO(String name, String lastname, String imageUrl) {
-        this.name = name;
-        this.imageUrl = imageUrl;
+
     }
 
-    public UserDTO(long id, String name, String phoneNumber, String profileImage, BigDecimal wallet) {
+
+    public UserDTO(long id, String name, String profileImage, BigDecimal wallet) {
+    }
+
+    public UserDTO(String name, String email, String password) {
+        this.name=name;
+        this.email=email;
+        this.password=password;
     }
 }

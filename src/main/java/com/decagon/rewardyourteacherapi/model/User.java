@@ -7,27 +7,28 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false,name = "name")
     private String name;
+    @Column(nullable = false, unique = true,name = "email")
     private String email;
+    @Column(nullable = false, name = "password")
     private String password;
     private String profileImage;
     private BigDecimal wallet = new BigDecimal(0.0);
-    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne
     @JoinColumn(name = "school_id")
+//    @Column(nullable = false)
     private School school;
 
     public User(String name, String email, String password, Role role) {
@@ -54,5 +55,9 @@ public class User {
 
     public User(String email) {
         this.email = email;
+    }
+
+    public User(String name, String email, String password)
+    {
     }
 }

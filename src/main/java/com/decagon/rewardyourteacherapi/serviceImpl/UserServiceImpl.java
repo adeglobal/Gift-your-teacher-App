@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
 import com.decagon.rewardyourteacherapi.exception.AuthorizationException;
+import com.decagon.rewardyourteacherapi.exception.SchoolNotFoundException;
 import com.decagon.rewardyourteacherapi.exception.UserAlreadyExistsException;
 import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
@@ -12,6 +13,8 @@ import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
+import com.decagon.rewardyourteacherapi.repository.SchoolRepository;
+import com.decagon.rewardyourteacherapi.repository.TeacherExtraInfoRepository;
 import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.security.JwtService;
 import com.decagon.rewardyourteacherapi.service.UserService;
@@ -43,6 +46,8 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final SchoolRepository schoolRepo;
+    private final TeacherExtraInfoRepository extraInfoRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final NotificationRepository notificationRepository;
@@ -59,17 +64,43 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public UserDTO signUpUser(User user) {
+    public Object signUpUser(UserDTO userDTO,Role role) {
+        User user  = new User();
+        TeacherExtraInfo teacher = new TeacherExtraInfo();
+        School school = schoolRepo.findSchoolBySchoolName(userDTO.getSchoolName());
+        if(school==null){
+            throw  new SchoolNotFoundException("School Not Available");
+        }
         boolean userExists = userRepository
-                .findByEmail(user.getEmail())
+                .findByEmail(userDTO.getEmail())
                 .isPresent();
 
         if (userExists) {
-            throw new UserAlreadyExistsException(String.format("Email %s has been taken", user.getEmail()));
+            throw new UserAlreadyExistsException(String.format("Email %s has been taken", userDTO.getEmail()));
         }
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+
+
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setSchool(school);
         user.setPassword(encodedPassword);
-        return PayloadToModel.mapUserToDTO(userRepository.save(user));
+        user.setRole(role);
+        userRepository.save(user);
+
+        if(user.getRole()==Role.TEACHER){
+            teacher.setAbout(userDTO.getAbout());
+            teacher.setUser(user);
+            teacher.setPosition(userDTO.getPosition());
+            teacher.setStatus(userDTO.getStatus());
+            teacher.setSchoolType(userDTO.getSchoolType());
+            teacher.setYearsOfTeaching(userDTO.getYearsOfTeaching());
+            teacher.setPhoneNumber(userDTO.getPhoneNumber());
+            teacher.setSubjectTaught(userDTO.getSubjectTaught());
+            return extraInfoRepository.save(teacher);
+
+        }
+        return user;
     }
 
     public String authenticateOauth2User(UserDTO request) {
