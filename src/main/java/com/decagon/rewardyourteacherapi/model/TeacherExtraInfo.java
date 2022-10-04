@@ -16,7 +16,7 @@ public class TeacherExtraInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String phoneNumber;
-    private Long yearsOfTeaching;
+    private String yearsOfTeaching;
     private String subjectTaught;
     private String schoolType;
     private String status;

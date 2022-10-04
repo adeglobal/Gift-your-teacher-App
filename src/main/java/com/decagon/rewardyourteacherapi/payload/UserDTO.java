@@ -20,7 +20,7 @@ public class UserDTO {
     private BigDecimal wallet;
 
     private Role role;
-    private Long yearsOfTeaching;
+    private String yearsOfTeaching;
     private String subjectTaught;
     private String schoolType;
     private String status;

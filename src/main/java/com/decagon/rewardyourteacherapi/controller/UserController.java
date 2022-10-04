@@ -21,8 +21,6 @@ public class UserController {
 
     @PostMapping(path  ="/register/student")
     public ResponseEntity<APIResponse> registerLocal(@RequestBody UserDTO request) {
-        System.out.println(request);
-        System.out.println("Hello Student");
         return Responder.okay(userService.signUpUser(request,Role.STUDENT));
     }
 
