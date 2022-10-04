@@ -7,41 +7,39 @@ import lombok.*;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String firstName;
-    private String lastName;
+    @Column(nullable = false,name = "name")
+    private String name;
+    @Column(nullable = false, unique = true,name = "email")
     private String email;
+    @Column(nullable = false, name = "password")
     private String password;
     private String profileImage;
     private BigDecimal wallet = new BigDecimal(0.0);
-    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne
     @JoinColumn(name = "school_id")
+//    @Column(nullable = false)
     private School school;
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String name, String email, String password, Role role) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
-    public User(long id, String firstName, String lastName, String email, String password) {
+    public User(long id, String name, String email, String password) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -49,14 +47,17 @@ public class User {
     public User(long id) {
         this.id = id;
     }
-    public User(long id, String firstName, String lastName, String profileImage) {
+    public User(long id, String name, String profileImage) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.profileImage = profileImage;
     }
 
     public User(String email) {
         this.email = email;
+    }
+
+    public User(String name, String email, String password)
+    {
     }
 }

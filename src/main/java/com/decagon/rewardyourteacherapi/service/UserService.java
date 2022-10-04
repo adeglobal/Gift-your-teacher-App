@@ -1,5 +1,6 @@
 package com.decagon.rewardyourteacherapi.service;
 
+import com.decagon.rewardyourteacherapi.enums.Role;
 import com.decagon.rewardyourteacherapi.model.Notification;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.LoginDTO;
@@ -16,7 +17,7 @@ public interface UserService {
 
     String login(LoginDTO loginDto);
 
-    UserDTO signUpUser(User user);
+    Object signUpUser(UserDTO userDTO, Role role);
 
     String authenticateOauth2User(UserDTO request);
 

@@ -74,7 +74,7 @@ public class NotificationServiceImp implements NotificationService {
         notificationRepository.save(notification);
         List<MailDTO> mailList = new ArrayList<>();
         mailList.add(new MailDTO(message.getReceiver(),
-                "You've got mail from"+message.getSender().getFirstName(), message.getContent()));
+                "You've got mail from"+message.getSender().getName(), message.getContent()));
         SendEmail(mailList);
     }
 

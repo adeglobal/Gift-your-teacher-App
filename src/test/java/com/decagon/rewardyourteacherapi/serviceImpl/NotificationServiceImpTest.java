@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = RewardYourTeacherApiApplication.class)
 
 class NotificationServiceImpTest {
-    User user1 = new User( 1L,"bukky", "terroist", "test@gamil.com", "password");
-    User user2 = new User( 2L,"george", "victim", "test2@gamil.com", "password");
+    User user1 = new User( 1L,"bukky", "test@gamil.com", "password");
+    User user2 = new User( 2L,"george", "test2@gamil.com", "password");
 //    String  teacherFunded = "A former student has successfully funded your wallet. Say Hi...";
 //    String  fundedTeacher = "You've successfully funded your teacher's wallet with N";
 //    String fundedWallet = "You have successfully funded you wallet with N";

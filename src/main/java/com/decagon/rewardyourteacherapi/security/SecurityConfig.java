@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "google.com","facebook.com"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000", "google.com","facebook.com"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET","PUT","POST","UPDATE","DELETE"));
         corsConfiguration.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", corsConfiguration); // Global for all paths
