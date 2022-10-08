@@ -53,14 +53,15 @@ public class UserServiceImpl implements UserService {
     private final NotificationRepository notificationRepository;
 
 
-    public String login(LoginDTO loginDto){
+    public UserDTO login(LoginDTO loginDto){
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if(auth.isAuthenticated()){
 
-            return "Bearer " + JwtService.generateToken
+            String token = "Bearer " + JwtService.generateToken
             (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
                     new ArrayList<>())) +" "+ loginDto.getEmail();
-
+            User user = userRepository.findByEmail(loginDto.getEmail()).orElse(null);
+            return PayloadToModel.mapUserToDTO2(user, token);
         }else{
             throw new AuthorizationException("Email or password Not Authenticated ");
         }

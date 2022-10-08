@@ -15,7 +15,7 @@ import java.security.Principal;
 @Service
 public interface UserService {
 
-    String login(LoginDTO loginDto);
+    UserDTO login(LoginDTO loginDto);
 
     Object signUpUser(UserDTO userDTO, Role role);
 

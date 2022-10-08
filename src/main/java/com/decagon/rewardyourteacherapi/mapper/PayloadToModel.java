@@ -42,7 +42,9 @@ public class PayloadToModel {
         System.out.println(user.getId());
         return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet());
     }
-
+    public static  UserDTO mapUserToDTO2(User user, String token){
+        return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet(), token, user.getRole());
+    }
     public static NotificationDTO mapNotToDTO(Notification notification){
         return  new NotificationDTO(notification.getId(), notification.getMessage(), notification.getCreatedAt());
     }
