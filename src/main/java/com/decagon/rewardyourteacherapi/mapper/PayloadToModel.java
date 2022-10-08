@@ -39,6 +39,7 @@ public class PayloadToModel {
     }
 
     public static  UserDTO mapUserToDTO(User user){
+        System.out.println(user.getId());
         return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet());
     }
 

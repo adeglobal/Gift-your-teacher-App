@@ -55,6 +55,11 @@ public class StudentController {
         return Responder.okay(walletService.transferFunds(request));
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<APIResponse> viewTeacherById(@PathVariable("id") Long id){
+        return Responder.okay((userService.viewStudentProfile(id)));
+    }
+
 
 
 }

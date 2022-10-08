@@ -19,9 +19,9 @@ public class TeacherController {
         return Responder.okay(userService.updateUserProfile(request));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> viewTeacherById(@PathVariable("id") Long id){
-        return Responder.okay((userService.viewTeacherProfile(id)));
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<APIResponse> viewTeacherByEmailAndRole(@PathVariable String email){
+        return Responder.okay((userService.viewTeacherProfile(email)));
     }
     @GetMapping(value = "/search/{name}")
     public ResponseEntity <APIResponse> searchTeacher(@PathVariable(value = "name")String name){

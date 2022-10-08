@@ -56,9 +56,11 @@ public class UserServiceImpl implements UserService {
     public String login(LoginDTO loginDto){
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if(auth.isAuthenticated()){
+
             return "Bearer " + JwtService.generateToken
             (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
-                    new ArrayList<>()));
+                    new ArrayList<>())) +" "+ loginDto.getEmail();
+
         }else{
             throw new AuthorizationException("Email or password Not Authenticated ");
         }
@@ -145,8 +147,19 @@ public class UserServiceImpl implements UserService {
         Pageable paging = PageRequest.of(page, size);
         School school = new School(id);
         Page<User> paged = userRepository.findAllBySchoolAndRole(school, Role.TEACHER, paging);
-        List<UserDTO> userDTOList = paged.getContent().stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());
-        return new PageImpl<>(userDTOList, paging, paged.getTotalElements());
+        //List<UserDTO> userDTOList = paged.getContent().stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());
+        List<UserDTO> userDTOList1 = new ArrayList<>();
+        paged.getContent().forEach((e)->{
+                TeacherExtraInfo teacherExtraInfo = extraInfoRepository.getTeacherExtraInfoByUser(e);
+                UserDTO userDTO = new UserDTO();
+                userDTO.setName(e.getName());
+                userDTO.setPosition(teacherExtraInfo.getPosition());
+                userDTO.setYearsOfTeaching(teacherExtraInfo.getYearsOfTeaching());
+                userDTO.setSchoolName(e.getSchool().getSchoolName());
+                userDTOList1.add(userDTO);
+
+            });
+        return new PageImpl<>(userDTOList1, paging, paged.getTotalElements());
     }
 
     @Override
@@ -157,10 +170,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO viewTeacherProfile(Long id) {
-        return PayloadToModel.mapUserToDTO(userRepository.findUserByIdAndRole(id,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found")));
+    public User viewTeacherProfile(String Email) {
+        return userRepository.findUserByEmailAndRole(Email,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
     }
 
+    @Override
+    public UserDTO viewStudentProfile(Long id) {
+        return PayloadToModel.mapUserToDTO(userRepository.findUserByIdAndRole(id,Role.STUDENT).orElseThrow(()->new RuntimeException("User not found")));
+    }
     public List<UserDTO> searchTeacher(String name){
         List<User> list = userRepository.findUsersByRoleAndNameContainingIgnoreCase(Role.TEACHER, name);
         return  list.stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());

@@ -28,10 +28,7 @@ public class UserDTO {
     private String position;
 
 
-
-
-
-    public UserDTO(Long id, String name, String lastname, String imageUrl, BigDecimal wallet) {
+    public UserDTO(Long id, String name, String imageUrl, BigDecimal wallet) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
