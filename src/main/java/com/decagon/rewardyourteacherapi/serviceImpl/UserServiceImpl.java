@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
             String token = "Bearer " + JwtService.generateToken
             (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
-                    new ArrayList<>())) +" "+ loginDto.getEmail();
+                    new ArrayList<>()));
             User user = userRepository.findByEmail(loginDto.getEmail()).orElse(null);
             return PayloadToModel.mapUserToDTO2(user, token);
         }else{
