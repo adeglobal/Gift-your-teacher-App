@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.model;
 
 
 import com.decagon.rewardyourteacherapi.enums.Role;
+import com.decagon.rewardyourteacherapi.payload.UserDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends UserDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

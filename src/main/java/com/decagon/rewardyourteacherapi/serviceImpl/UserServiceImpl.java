@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
             String token = "Bearer " + JwtService.generateToken
             (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
-                    new ArrayList<>())) +" "+ loginDto.getEmail();
+                    new ArrayList<>()));
             User user = userRepository.findByEmail(loginDto.getEmail()).orElse(null);
             return PayloadToModel.mapUserToDTO2(user, token);
         }else{
@@ -153,6 +153,7 @@ public class UserServiceImpl implements UserService {
         paged.getContent().forEach((e)->{
                 TeacherExtraInfo teacherExtraInfo = extraInfoRepository.getTeacherExtraInfoByUser(e);
                 UserDTO userDTO = new UserDTO();
+                userDTO.setId(e.getId());
                 userDTO.setName(e.getName());
                 userDTO.setPosition(teacherExtraInfo.getPosition());
                 userDTO.setYearsOfTeaching(teacherExtraInfo.getYearsOfTeaching());
@@ -171,13 +172,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User viewTeacherProfile(String Email) {
-        return userRepository.findUserByEmailAndRole(Email,Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    public User viewTeacherProfile(Long id) {
+        return userRepository.findUserByIdAndRole(id, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
     }
 
     @Override
-    public UserDTO viewStudentProfile(Long id) {
-        return PayloadToModel.mapUserToDTO(userRepository.findUserByIdAndRole(id,Role.STUDENT).orElseThrow(()->new RuntimeException("User not found")));
+    public User viewStudentProfile(Long id) {
+        return userRepository.findUserByIdAndRole(id, Role.STUDENT).orElseThrow(()->new RuntimeException("User not found"));
     }
     public List<UserDTO> searchTeacher(String name){
         List<User> list = userRepository.findUsersByRoleAndNameContainingIgnoreCase(Role.TEACHER, name);

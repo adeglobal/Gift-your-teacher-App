@@ -41,8 +41,8 @@ public class StudentController {
     }
 
     @PostMapping("/test")
-    public ResponseEntity<?> pay(@RequestBody FundingRequestDTO request) throws Exception {
-        return ResponseEntity.ok(transaction.initTransaction(request));
+    public ResponseEntity<?> pay(@RequestParam ("amount") BigDecimal amount) throws Exception {
+        return ResponseEntity.ok(transaction.initTransaction(amount));
     }
 
     @PostMapping("/test/{reference}")
@@ -56,10 +56,9 @@ public class StudentController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<APIResponse> viewTeacherById(@PathVariable("id") Long id){
+    public ResponseEntity<APIResponse> viewStudentByIdAndRole(@PathVariable("id") Long id){
         return Responder.okay((userService.viewStudentProfile(id)));
     }
 
-
-
+    
 }

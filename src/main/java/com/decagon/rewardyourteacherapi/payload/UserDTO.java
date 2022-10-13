@@ -10,11 +10,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private Long id;
+    private long id;
     private String schoolName;
     private String name;
     private String email;
     private String password;
+
     private  String phoneNumber;
     private String imageUrl;
     private BigDecimal wallet;

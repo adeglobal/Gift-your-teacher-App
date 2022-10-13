@@ -27,7 +27,7 @@ public class VerifyTransactionResponse {
     @Setter
     @ToString
     public static class Data {
-      private int id;
+      private long id;
       private String domain;
       private String status;
       private String reference;

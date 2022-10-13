@@ -3,6 +3,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 import com.decagon.rewardyourteacherapi.service.WalletService;
 import com.decagon.rewardyourteacherapi.payload.FundingRequestDTO;
+import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import com.decagon.rewardyourteacherapi.util.InitializeTransactionResponse;
 import com.decagon.rewardyourteacherapi.util.VerifyTransactionResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 
 @Service
 @Transactional
@@ -35,12 +37,15 @@ public class PaystackTransactionService {
     @Value("${payStack_secretKey}")
     private String payStackKey;
 
-    public InitializeTransactionResponse initTransaction(FundingRequestDTO request) throws Exception {
+    public InitializeTransactionResponse initTransaction(BigDecimal amount) throws Exception {
         InitializeTransactionResponse initializeTransactionResponse;
         try {
             // convert transaction to json then use it as a body to post json
             Gson gson = new Gson();
             // add paystack chrges to the amount
+            FundingRequestDTO request = new FundingRequestDTO();
+            request.setAmount(amount);
+            request.setEmail(ContextEmail.getEmail());
             StringEntity postingString = new StringEntity(gson.toJson(request));
             HttpClient client = HttpClientBuilder.create().build();
             HttpPost post = new HttpPost("https://api.paystack.co/transaction/initialize");
@@ -100,9 +105,11 @@ public class PaystackTransactionService {
             try {
                 payStackResponse = mapper.readValue(result.toString(), VerifyTransactionResponse.class);
 
-                if (payStackResponse.getData().getGateway_response().equals("Successful"))
+                if (payStackResponse.getData().getGateway_response().equals("Successful")) {
                     //call fund wallet
+                    walletService.fundStudentWallet(new BigDecimal(payStackResponse.getData().getAmount()));
                     return payStackResponse;
+                }
 
             } catch (JsonProcessingException e) {
                 System.err.println("You've already made payment or An error occurred while verifying payment ");

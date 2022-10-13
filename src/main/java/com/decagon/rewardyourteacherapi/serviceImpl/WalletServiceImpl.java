@@ -49,6 +49,9 @@ public class WalletServiceImpl implements WalletService {
         String email = ((UserDetails)principal).getUsername();
         //User sender = userRepository.findUserByEmailAndRole(email,Role.STUDENT).orElseThrow(() ->new UserDoesNotExistException(String.format("student with %s not found",email)));
         User sender = userRepository.findByEmail(email).orElseThrow(() -> new UserDoesNotExistException(String.format("Student with %s not found", email)));
+        System.out.println(sender.getWallet());
+        System.out.println(request.getAmount());
+        System.out.println(request.getId());
         if(sender.getWallet().compareTo(request.getAmount()) < 0){
             throw new WalletException("Insufficient funds");
         }

@@ -29,9 +29,9 @@ public interface UserService {
 
     Page<UserDTO> retrieveTeachers(int page, int size);
 
-    User viewTeacherProfile(String Email);
+    User viewTeacherProfile(Long id);
 
-    UserDTO viewStudentProfile(Long id);
+    User viewStudentProfile(Long id);
 
     Notification teacherAppreciatesStudent(Long userId);
 
