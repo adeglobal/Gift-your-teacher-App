@@ -65,7 +65,7 @@ public class WalletServiceImpl implements WalletService {
         List<User> users = new ArrayList<>();
         userRepository.saveAll(users);
         Transaction transaction = new Transaction(sender, receiver, request.getAmount());
-        transactionRepository.save(transaction);
+       transaction= transactionRepository.save(transaction);
         notificationService.saveTransactionNotification(transaction);
         return transaction;
 
