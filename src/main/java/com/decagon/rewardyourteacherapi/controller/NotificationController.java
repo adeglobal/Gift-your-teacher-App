@@ -20,5 +20,4 @@ public class NotificationController {
     public ResponseEntity<APIResponse>retrieveUserNotification(@RequestParam ("id")Long id){
        return Responder.okay(notificationService.retrieveUserNotification(id));
     }
-
 }
