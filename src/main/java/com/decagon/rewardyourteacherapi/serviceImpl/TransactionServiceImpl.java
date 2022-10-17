@@ -52,20 +52,4 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return total;
     }
-
-    public BigDecimal totalMoneySent(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String sender = ((UserDetails)principal).getUsername();
-        BigDecimal moneySent= new BigDecimal(0);
-         User user  = userRepository.findByEmail(sender).orElseThrow(()-> new UserDoesNotExistException(String.format("user with email: %s not found", sender)));
-         List<Transaction> transactions = transactionRepository.findTransactionsBySender(user);
-         for(Transaction transaction: transactions){
-             if(transaction.getRecipient().getId() != user.getId()){
-                 moneySent = moneySent.add(transaction.getAmount());
-             }
-         }
-         return moneySent;
-
-    }
-
 }

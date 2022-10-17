@@ -67,10 +67,10 @@ public class NotificationServiceImp implements NotificationService {
             }
         }
         else{
-            notificationList.add( new Notification(transaction.getRecipient(), TEACHER_REWARDED.getStr()+transaction.getRecipient().getName()));
-            mailList.add(new MailDTO(transaction.getRecipient(), "You've Been Rewarded", TEACHER_REWARDED.getStr()+transaction.getRecipient().getName()));
-            notificationList.add( new Notification(transaction.getSender(), REWARD_TEACHER.getStr()));
-            mailList.add(new MailDTO(transaction.getRecipient(), "Your Reward Was Sent", REWARD_TEACHER.getStr()));
+            notificationList.add( new Notification(transaction.getRecipient(), TEACHER_REWARDED.getStr() + transaction.getSender().getName()));
+            mailList.add(new MailDTO(transaction.getRecipient(), "You've Been Rewarded", TEACHER_REWARDED.getStr() + transaction.getSender().getName()));
+            notificationList.add( new Notification(transaction.getSender(), REWARD_TEACHER.getStr() + transaction.getRecipient().getName()));
+            mailList.add(new MailDTO(transaction.getRecipient(), "Your Reward Was Sent", REWARD_TEACHER.getStr() + transaction.getRecipient().getName()));
             }
         notificationRepository.saveAll(notificationList);
         SendEmail(mailList);

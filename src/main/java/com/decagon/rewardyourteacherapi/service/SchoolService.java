@@ -11,4 +11,6 @@ public interface SchoolService {
 
     Page<School> retrieveSchools(int page, int size);
 
+    public List<School> retrieve();
+
 }

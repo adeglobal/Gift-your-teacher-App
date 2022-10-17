@@ -27,4 +27,10 @@ public class SchoolServiceImpl implements SchoolService {
     public Page<School> retrieveSchools(int page, int size) {
        return schoolRepository.findAll(PageRequest.of(page,size));
     }
+    @Override
+    public List<School> retrieve(){
+        System.out.println("getting list of schools");
+        return schoolRepository.findAll();
+    }
 }
+

@@ -34,4 +34,9 @@ public class SchoolController {
         return Responder.okay(schoolService.retrieveSchools(page, size));
     }
 
+    @GetMapping("/retrieve")
+    public ResponseEntity<APIResponse> retrieve(){
+        return Responder.okay(schoolService.retrieve());
+    }
+
 }

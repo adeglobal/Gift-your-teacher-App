@@ -1,6 +1,8 @@
 package com.decagon.rewardyourteacherapi.payload;
 
 import com.decagon.rewardyourteacherapi.enums.Role;
+import com.decagon.rewardyourteacherapi.model.TeacherExtraInfo;
+import com.decagon.rewardyourteacherapi.model.User;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -62,5 +64,15 @@ public class UserDTO {
         this.name=name;
         this.email=email;
         this.password=password;
+    }
+
+    public UserDTO(User e, TeacherExtraInfo teacherExtraInfoByUser) {
+        System.out.println(teacherExtraInfoByUser);
+        System.out.println(e.getSchool().getSchoolName());
+        this.id  = e.getId();
+        this.name = e.getName();
+        this.position = teacherExtraInfoByUser.getPosition();
+        this.yearsOfTeaching = teacherExtraInfoByUser.getYearsOfTeaching();
+        this.schoolName = e.getSchool().getSchoolName();
     }
 }

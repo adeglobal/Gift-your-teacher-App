@@ -65,5 +65,4 @@ public class User extends UserDTO {
         this.email = email;
     }
 
-
 }

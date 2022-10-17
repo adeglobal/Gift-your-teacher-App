@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests().antMatchers("/api/v1/user/**",
-                        "/index", "/api/v1/school/retrieveSchools", "/api/v1/mail/**", "/api/v1/loggedOut", "/swagger-ui/**")
+                        "/index", "/api/v1/school/**", "/api/v1/mail/**", "/api/v1/loggedOut", "/swagger-ui/**")
                 .permitAll()
                 .antMatchers("/api/v1/student/test", "api/v1/school/{id}/{page}&{size}", "/api/v1/student/test?={reference}","api/v1/student/wallet-fund", "/api/v1/student/total-moneysent" ).hasRole(STUDENT.name())
                 .antMatchers(HttpMethod.POST, "api/v1/student/update", "/api/v1/student/wallet-transfer").hasRole(STUDENT.name())

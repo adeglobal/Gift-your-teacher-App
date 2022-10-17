@@ -1,6 +1,7 @@
 package com.decagon.rewardyourteacherapi.mapper;
 
 import com.decagon.rewardyourteacherapi.model.Notification;
+import com.decagon.rewardyourteacherapi.model.TeacherExtraInfo;
 import com.decagon.rewardyourteacherapi.model.Transaction;
 import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.NotificationDTO;
@@ -47,9 +48,27 @@ public class PayloadToModel {
     }
 
     public static  UserDTO mapUserToDTO(User user){
-        System.out.println(user.getId());
-        return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet(),
-                user.getEmail(), user.getSchool().getSchoolName(), user.getPhoneNumber());
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        if(user.getName() != null){
+            userDTO.setName(user.getName());
+        }
+        if(user.getProfileImage() != null){
+            userDTO.setImageUrl(user.getProfileImage());
+        }
+        if(user.getEmail() != null){
+            userDTO.setEmail(user.getEmail());
+        }
+        if(user.getWallet() != null){
+            userDTO.setWallet(user.getWallet());
+        }
+        if(user.getSchool() != null){
+            userDTO.setSchoolName(user.getSchool().getSchoolName());
+        }
+        if(user.getPhoneNumber() != null){
+            userDTO.setPhoneNumber(user.getPhoneNumber());
+        }
+        return  userDTO;
     }
     public static  UserDTO mapUserToDTO2(User user, String token){
         return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet(), token, user.getRole());

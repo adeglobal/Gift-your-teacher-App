@@ -69,9 +69,9 @@ public class UserServiceImpl implements UserService {
     public Object signUpUser(UserDTO userDTO,Role role) {
         User user  = new User();
         TeacherExtraInfo teacher = new TeacherExtraInfo();
-        School school = schoolRepo.findSchoolBySchoolName(userDTO.getSchoolName());
-        if(school==null){
-            throw  new SchoolNotFoundException("School Not Available");
+        School school = new School();
+        if(role.equals(Role.TEACHER)){
+            school = schoolRepo.findById(Long.parseLong(userDTO.getSchoolName())).orElseThrow(()-> new SchoolNotFoundException("School not found"));
         }
         boolean userExists = userRepository
                 .findByEmail(userDTO.getEmail())
@@ -81,11 +81,14 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException(String.format("Email %s has been taken", userDTO.getEmail()));
         }
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
-
-
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setSchool(school);
+        if(role.equals(Role.TEACHER)){
+            user.setSchool(school);
+        }
+        else{
+            user.setSchool(null);
+        }
         user.setPassword(encodedPassword);
         user.setRole(role);
         if(user.getRole()==Role.TEACHER){
@@ -157,26 +160,14 @@ public class UserServiceImpl implements UserService {
         Pageable paging = PageRequest.of(page, size);
         School school = new School(id);
         Page<User> paged = userRepository.findAllBySchoolAndRole(school, Role.TEACHER, paging);
-        //List<UserDTO> userDTOList = paged.getContent().stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());
-        List<UserDTO> userDTOList1 = new ArrayList<>();
-        paged.getContent().forEach((e)->{
-                TeacherExtraInfo teacherExtraInfo = extraInfoRepository.getTeacherExtraInfoByUser(e);
-                UserDTO userDTO = new UserDTO();
-                userDTO.setId(e.getId());
-                userDTO.setName(e.getName());
-                userDTO.setPosition(teacherExtraInfo.getPosition());
-                userDTO.setYearsOfTeaching(teacherExtraInfo.getYearsOfTeaching());
-                userDTO.setSchoolName(e.getSchool().getSchoolName());
-                userDTOList1.add(userDTO);
-
-            });
-        return new PageImpl<>(userDTOList1, paging, paged.getTotalElements());
+        List<UserDTO> userDTOList = paged.getContent().stream().map(e-> new UserDTO(e, extraInfoRepository.getTeacherExtraInfoByUser(e))).collect(Collectors.toList());
+        return new PageImpl<>(userDTOList, paging, paged.getTotalElements());
     }
 
     @Override
     public Page<UserDTO> retrieveTeachers(int page, int size) {
         Page<User> userPage= userRepository.findUsersByRole(PageRequest.of(page, size),Role.TEACHER );
-        List<UserDTO> userDTOList = userPage.stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());
+        List<UserDTO> userDTOList = userPage.stream().map(e-> new UserDTO(e, extraInfoRepository.getTeacherExtraInfoByUser(e))).collect(Collectors.toList());
         return new PageImpl<>(userDTOList, PageRequest.of(page, size), userPage.getTotalElements());
     }
 
@@ -191,7 +182,7 @@ public class UserServiceImpl implements UserService {
     }
     public List<UserDTO> searchTeacher(String name){
         List<User> list = userRepository.findUsersByRoleAndNameContainingIgnoreCase(Role.TEACHER, name);
-        return  list.stream().map(PayloadToModel::mapUserToDTO).collect(Collectors.toList());
+        return  list.stream().map(e-> new UserDTO(e, extraInfoRepository.getTeacherExtraInfoByUser(e))).collect(Collectors.toList());
     }
 
     @Override
