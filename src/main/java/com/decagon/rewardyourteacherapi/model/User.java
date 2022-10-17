@@ -23,6 +23,7 @@ public class User extends UserDTO {
     private String email;
     @Column(nullable = false, name = "password")
     private String password;
+    private String phoneNumber;
     private String profileImage;
     private BigDecimal wallet = new BigDecimal(0.0);
     @Enumerated(EnumType.STRING)
@@ -54,11 +55,15 @@ public class User extends UserDTO {
         this.profileImage = profileImage;
     }
 
+    public User( String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     public User(String email) {
         this.email = email;
     }
 
-    public User(String name, String email, String password)
-    {
-    }
+
 }

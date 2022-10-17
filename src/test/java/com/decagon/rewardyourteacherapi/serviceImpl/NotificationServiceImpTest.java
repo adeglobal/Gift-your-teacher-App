@@ -46,7 +46,7 @@ class NotificationServiceImpTest {
         userRepository.save(user2);
         Transaction transaction1 = new Transaction(1L, user1, user2, new BigDecimal(12000.21));
         Transaction transaction2 = new Transaction(2L, user1, user1, new BigDecimal(5000));
-        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository, javaMailSender);
+        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository, userRepository,javaMailSender);
         notService.javaMailSender = javaMailSender;
         notService.saveTransactionNotification(transaction1);
         assertNotNull(notificationRepository.findByMessageAndUser(MessageType.TEACHER_REWARDED.getStr(), user2));
@@ -66,7 +66,7 @@ class NotificationServiceImpTest {
         userRepository.save(user1);
         userRepository.save(user2);
         Message message = new Message(user1, user2, "Hello governor");
-        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository, javaMailSender);
+        NotificationServiceImp notService = new NotificationServiceImp(notificationRepository, userRepository, javaMailSender);
         notService.javaMailSender= javaMailSender;
         notService.saveMessageNotification(message);
         assertNotNull(notificationRepository.findByMessageAndUser("Hello governor", user2));

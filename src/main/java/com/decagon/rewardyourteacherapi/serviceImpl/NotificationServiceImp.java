@@ -2,6 +2,7 @@ package com.decagon.rewardyourteacherapi.serviceImpl;
 
 
 import com.decagon.rewardyourteacherapi.enums.Role;
+import com.decagon.rewardyourteacherapi.exception.UserNotFoundException;
 import com.decagon.rewardyourteacherapi.mapper.PayloadToModel;
 import com.decagon.rewardyourteacherapi.model.Message;
 import com.decagon.rewardyourteacherapi.model.Notification;
@@ -10,13 +11,16 @@ import com.decagon.rewardyourteacherapi.model.User;
 import com.decagon.rewardyourteacherapi.payload.MailDTO;
 import com.decagon.rewardyourteacherapi.payload.NotificationDTO;
 import com.decagon.rewardyourteacherapi.repository.NotificationRepository;
+import com.decagon.rewardyourteacherapi.repository.UserRepository;
 import com.decagon.rewardyourteacherapi.service.NotificationService;
+import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +32,7 @@ import static com.decagon.rewardyourteacherapi.enums.MessageType.*;
 public class NotificationServiceImp implements NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -35,8 +40,9 @@ public class NotificationServiceImp implements NotificationService {
     JavaMailSender javaMailSender;
 
     @Autowired
-    public NotificationServiceImp(NotificationRepository notificationRepository, JavaMailSender javaMailSender) {
+    public NotificationServiceImp(NotificationRepository notificationRepository, UserRepository userRepository,JavaMailSender javaMailSender) {
         this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
     }
         @Override
@@ -46,7 +52,9 @@ public class NotificationServiceImp implements NotificationService {
         String message;
         if(transaction.getSender().getId() == transaction.getRecipient().getId()){
             if(transaction.getSender().getRole().equals(Role.STUDENT)) {
-                message = FUNDED_WALLET.getStr() + transaction.getAmount();
+                DecimalFormat df = new DecimalFormat("#,##0.00");
+                String formatMoney = df.format(transaction.getAmount());
+                message = FUNDED_WALLET.getStr() + formatMoney;
                 Notification notification = new Notification( transaction.getRecipient(), message);
                 notificationList.add(notification);
                 mailList.add(new MailDTO(transaction.getRecipient(),  "Funded your wallet" ,message));
@@ -59,8 +67,8 @@ public class NotificationServiceImp implements NotificationService {
             }
         }
         else{
-            notificationList.add( new Notification(transaction.getRecipient(), TEACHER_REWARDED.getStr()));
-            mailList.add(new MailDTO(transaction.getRecipient(), "You've Been Rewarded", TEACHER_REWARDED.getStr()));
+            notificationList.add( new Notification(transaction.getRecipient(), TEACHER_REWARDED.getStr()+transaction.getRecipient().getName()));
+            mailList.add(new MailDTO(transaction.getRecipient(), "You've Been Rewarded", TEACHER_REWARDED.getStr()+transaction.getRecipient().getName()));
             notificationList.add( new Notification(transaction.getSender(), REWARD_TEACHER.getStr()));
             mailList.add(new MailDTO(transaction.getRecipient(), "Your Reward Was Sent", REWARD_TEACHER.getStr()));
             }
@@ -92,10 +100,10 @@ public class NotificationServiceImp implements NotificationService {
         return mailMessages;
     }
 
-    public List<NotificationDTO> retrieveUserNotification(Long id){
-      User user = new User(id);
-      List<Notification> notifications = notificationRepository.findNotificationsByUser(user);
-      return  notifications.stream().map(PayloadToModel::mapNotToDTO).collect(Collectors.toList());
+    public List<NotificationDTO> retrieveUserNotification(){
+        User user = userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
+        List<Notification> notifications = notificationRepository.findNotificationsByUserOrderByCreatedAtDesc(user);
+        return  notifications.stream().map(PayloadToModel::mapNotToDTO).collect(Collectors.toList());
     }
 
 

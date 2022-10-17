@@ -16,5 +16,5 @@ public interface NotificationService {
 
       List<SimpleMailMessage> SendEmail(List<MailDTO> mailList);
 
-      List<NotificationDTO> retrieveUserNotification(Long id);
+      List<NotificationDTO> retrieveUserNotification();
 }

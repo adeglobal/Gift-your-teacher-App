@@ -31,4 +31,5 @@ public class TransactionController {
     public ResponseEntity<APIResponse> getWalletAmount (){
         return Responder.okay(userService.getCurrentWalletBalance());
     }
+
 }

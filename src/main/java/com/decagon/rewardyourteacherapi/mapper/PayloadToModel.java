@@ -7,14 +7,22 @@ import com.decagon.rewardyourteacherapi.payload.NotificationDTO;
 import com.decagon.rewardyourteacherapi.payload.TransactionDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class PayloadToModel {
+
+    public static String pattern ="dd-MM-YY, hh:MM";
 
     public static User mapRequestToUser(UserDTO request){
        User user  = new User();
        if(request.getName() != null){
            user.setName(request.getName());
        }
-
        if(request.getEmail() != null){
            user.setEmail(request.getEmail());
        }
@@ -40,13 +48,23 @@ public class PayloadToModel {
 
     public static  UserDTO mapUserToDTO(User user){
         System.out.println(user.getId());
-        return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet());
+        return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet(),
+                user.getEmail(), user.getSchool().getSchoolName(), user.getPhoneNumber());
     }
     public static  UserDTO mapUserToDTO2(User user, String token){
         return  new UserDTO(user.getId(),user.getName(),user.getProfileImage(),user.getWallet(), token, user.getRole());
     }
     public static NotificationDTO mapNotToDTO(Notification notification){
-        return  new NotificationDTO(notification.getId(), notification.getMessage(), notification.getCreatedAt());
+        NotificationDTO  notificationDTO = new NotificationDTO(notification.getId(), notification.getMessage(), notification.getCreatedAt(), null);
+        String date;
+        if(LocalDate.now().equals( notificationDTO.getCreatedAt().toLocalDate())){
+            date = "Today, " + notificationDTO.getCreatedAt().format(DateTimeFormatter.ofPattern(pattern)).split(" ")[1];
+        }
+        else{
+            date = notificationDTO.getCreatedAt().format(DateTimeFormatter.ofPattern(pattern));
+        }
+        notificationDTO.setDate(date);
+        return notificationDTO;
     }
 
     public static TransactionDTO mapTransactToDTO(Transaction transaction){

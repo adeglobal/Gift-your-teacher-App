@@ -17,7 +17,7 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
     @GetMapping(path = "/retrieve")
-    public ResponseEntity<APIResponse>retrieveUserNotification(@RequestParam ("id")Long id){
-       return Responder.okay(notificationService.retrieveUserNotification(id));
+    public ResponseEntity<APIResponse>retrieveUserNotification(){
+       return Responder.okay(notificationService.retrieveUserNotification());
     }
 }

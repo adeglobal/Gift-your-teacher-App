@@ -3,6 +3,7 @@ package com.decagon.rewardyourteacherapi.controller;
 import com.decagon.rewardyourteacherapi.payload.APIResponse;
 import com.decagon.rewardyourteacherapi.payload.TransferFundsDTO;
 import com.decagon.rewardyourteacherapi.payload.UserDTO;
+import com.decagon.rewardyourteacherapi.service.TransactionService;
 import com.decagon.rewardyourteacherapi.service.UserService;
 import com.decagon.rewardyourteacherapi.serviceImpl.PaystackTransactionService;
 import com.decagon.rewardyourteacherapi.payload.FundingRequestDTO;
@@ -27,6 +28,7 @@ public class StudentController {
   private final UserService userService;
 
     private final WalletService walletService;
+    private  final TransactionService transactionService;
 
     private final PaystackTransactionService transaction;
 
@@ -60,5 +62,9 @@ public class StudentController {
         return Responder.okay((userService.viewStudentProfile(id)));
     }
 
+    @GetMapping("/total-moneysent")
+    public ResponseEntity<APIResponse> getTotalMoneySpent(){
+        return Responder.okay(transactionService.totalMoneySent());
+    }
     
 }

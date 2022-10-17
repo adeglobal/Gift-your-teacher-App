@@ -56,11 +56,10 @@ public class UserServiceImpl implements UserService {
     public UserDTO login(LoginDTO loginDto){
         Authentication auth= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         if(auth.isAuthenticated()){
-
             String token = "Bearer " + JwtService.generateToken
             (new org.springframework.security.core.userdetails.User(loginDto.getEmail(), loginDto.getPassword(),
                     new ArrayList<>()));
-            User user = userRepository.findByEmail(loginDto.getEmail()).orElse(null);
+            User user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(()-> new UserNotFoundException("User doesnt exist"));
             return PayloadToModel.mapUserToDTO2(user, token);
         }else{
             throw new AuthorizationException("Email or password Not Authenticated ");
@@ -89,6 +88,9 @@ public class UserServiceImpl implements UserService {
         user.setSchool(school);
         user.setPassword(encodedPassword);
         user.setRole(role);
+        if(user.getRole()==Role.TEACHER){
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+        }
         userRepository.save(user);
 
         if(user.getRole()==Role.TEACHER){
@@ -98,7 +100,6 @@ public class UserServiceImpl implements UserService {
             teacher.setStatus(userDTO.getStatus());
             teacher.setSchoolType(userDTO.getSchoolType());
             teacher.setYearsOfTeaching(userDTO.getYearsOfTeaching());
-            teacher.setPhoneNumber(userDTO.getPhoneNumber());
             teacher.setSubjectTaught(userDTO.getSubjectTaught());
             return extraInfoRepository.save(teacher);
 
@@ -117,16 +118,23 @@ public class UserServiceImpl implements UserService {
                 (new org.springframework.security.core.userdetails.User(request.getEmail(), request.getPassword(),
                         new ArrayList<>()));
     }
-    public UserDTO updateUserProfile (UserDTO userRegistrationDTO){
+    public UserDTO updateUserProfile (UserDTO userUpdateDTO){
         User dBUser =userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(() -> new UserNotFoundException("user details not fund"));
-        if (userRegistrationDTO.getName() != null) {
-            dBUser.setName(userRegistrationDTO.getName());
+        if (userUpdateDTO.getName() != null) {
+            dBUser.setName(userUpdateDTO.getName());
         }
-        if (userRegistrationDTO.getPassword() != null) {
-            dBUser.setPassword(userRegistrationDTO.getPassword());
+        if (userUpdateDTO.getPassword() != null) {
+            dBUser.setPassword(userUpdateDTO.getPassword());
         }
-        if (userRegistrationDTO.getImageUrl() != null) {
-            dBUser.setProfileImage(userRegistrationDTO.getImageUrl());
+        if (userUpdateDTO.getImageUrl() != null) {
+            dBUser.setProfileImage(userUpdateDTO.getImageUrl());
+        }
+        if(userUpdateDTO.getPhoneNumber() != null){
+            dBUser.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+        }
+        if(userUpdateDTO.getSchoolName() !=null){
+            School school = schoolRepo.findSchoolBySchoolName(userUpdateDTO.getSchoolName());
+            dBUser.setSchool(school);
         }
         return PayloadToModel.mapUserToDTO(userRepository.save(dBUser));
     }
@@ -172,13 +180,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User viewTeacherProfile(Long id) {
-        return userRepository.findUserByIdAndRole(id, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found"));
+    public UserDTO viewTeacherProfile(Long id) {
+        return PayloadToModel.mapUserToDTO(userRepository.findUserByIdAndRole(id, Role.TEACHER).orElseThrow(()->new RuntimeException("User not found")));
     }
 
     @Override
-    public User viewStudentProfile(Long id) {
-        return userRepository.findUserByIdAndRole(id, Role.STUDENT).orElseThrow(()->new RuntimeException("User not found"));
+    public UserDTO viewStudentProfile(Long id) {
+        return PayloadToModel.mapUserToDTO(userRepository.findUserByIdAndRole(id, Role.STUDENT).orElseThrow(()->new RuntimeException("User not found")));
     }
     public List<UserDTO> searchTeacher(String name){
         List<User> list = userRepository.findUsersByRoleAndNameContainingIgnoreCase(Role.TEACHER, name);

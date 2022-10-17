@@ -12,6 +12,7 @@ import com.decagon.rewardyourteacherapi.util.ContextEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,21 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionDTO> transactionHistory() {
         User user = userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(()->
                 new UserNotFoundException(String.format("user with email: %s not found", ContextEmail.getEmail())));
-        return transactionRepository.findTransactionsBySender(user).stream().map(PayloadToModel::mapTransactToDTO).collect(Collectors.toList());
+        return transactionRepository.findTransactionsBySenderOrRecipient(user, user).stream().map(PayloadToModel::mapTransactToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public BigDecimal totalMoneySent(){
+        User user = userRepository.findByEmail(ContextEmail.getEmail()).orElseThrow(()->
+                new UserNotFoundException(String.format("user with email: %s not found", ContextEmail.getEmail())));
+        BigDecimal total = new BigDecimal(0);
+        List<Transaction>  transactions = transactionRepository.findTransactionsBySender(user);
+        for(Transaction transaction: transactions){
+            if(transaction.getRecipient() != user){
+                total = total.add(transaction.getAmount());
+            }
+        }
+        return total;
     }
 
 }

@@ -37,15 +37,7 @@ public class UserDTO {
 
     }
 
-    /**
-     * a constructor to return token, role and id required for frontend to work
-     * @param id
-     * @param name
-     * @param imageUrl
-     * @param wallet
-     * @param token
-     * @param role
-     */
+
     public UserDTO(Long id, String name, String imageUrl, BigDecimal wallet, String token, Role role) {
         this.id = id;
         this.name = name;
@@ -56,7 +48,14 @@ public class UserDTO {
     }
 
 
-    public UserDTO(long id, String name, String profileImage, BigDecimal wallet) {
+    public UserDTO(long id, String name, String profileImage, BigDecimal wallet, String email, String schoolName, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.imageUrl = profileImage;
+        this.wallet = wallet;
+        this.email = email;
+        this.schoolName = schoolName;
+        this.phoneNumber = phoneNumber;
     }
 
     public UserDTO(String name, String email, String password) {
