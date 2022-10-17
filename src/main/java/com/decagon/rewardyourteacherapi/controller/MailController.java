@@ -19,12 +19,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/mail")
-public class MailController {
+public class  MailController {
 
     @Autowired
     NotificationService notificationService;
 
-    @PostMapping("/send")
+    @PostMapping("/send")    
     ResponseEntity<APIResponse> sendEmail(@RequestParam("email") String email, @RequestParam("message") String message,
                                           @RequestParam("subject") String subject){
         User user = new User(email);

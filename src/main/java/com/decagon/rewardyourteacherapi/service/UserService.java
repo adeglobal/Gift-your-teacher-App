@@ -27,6 +27,8 @@ public interface UserService {
 
     BigDecimal getCurrentWalletBalance();
 
+
+
     Page<UserDTO> retrieveTeachers(int page, int size);
 
     UserDTO viewTeacherProfile(Long id);

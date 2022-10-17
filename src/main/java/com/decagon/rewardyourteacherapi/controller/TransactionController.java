@@ -32,4 +32,8 @@ public class TransactionController {
         return Responder.okay(userService.getCurrentWalletBalance());
     }
 
+    @GetMapping("/total-moneysent")
+    public  ResponseEntity<APIResponse> getAllTotalMoneySent (){
+        return Responder.okay(transactionService.totalMoneySent());
+    }
 }
